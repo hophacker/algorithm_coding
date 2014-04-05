@@ -1,0 +1,5 @@
+d br
+d d
+b 32
+r  in
+disp F[i][j]
