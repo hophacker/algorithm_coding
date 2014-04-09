@@ -1,8 +1,8 @@
-target= longest-consecutive-sequence
+target= palindrome-partitioning
 
 
 all:
-	g++ -o $(target) -g $(target).cpp -w -std=c++11
+	g++ -o $(target) -g $(target).cpp -std=c++11  -Wno-deprecated
 
 .PHONY: run read debug
 
