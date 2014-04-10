@@ -1,8 +1,13 @@
 #include <cmath>
+#include <set>
+#include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -58,7 +63,9 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printV(a) printA(a,0,a.size()-1)
+#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -72,61 +79,45 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
-private:
-    int n, m;
-    vector<vector<bool> >vis;
-    vector<vector<char> >b;
-    string w;
+#define bit(x,i) (x&(1<<i))
 public:
-    bool search(int i, int j, int len){
-        if (len == w.length() - 1) return true;
-        for (int d = 0; d < 4; d++){
-            int x = fx[d][0] + i;
-            int y = fx[d][1] + j;
-            if (0 <= x && x < n && 0 <= y && y < m && !vis[x][y] && b[x][y] == w[len+1]){
-                vis[x][y] = true;
-                if (search(x, y, len+1)) return true;
-                vis[x][y] = false;
+    int singleNumber(int A[], int n) {
+        vector<int> b(32, 0);
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < 32; j++) if (bit(A[i], j)){
+                b[j]++;
             }
         }
-        return false;
-    }
-    bool exist(vector<vector<char> > &board, string word) {
-        n = board.size();
-        m = board[0].size();
-//        for (int i = 0; i < n; i++){
-//            for (int j = 0; j < m; j++)
-//                cout << board[i][j];
-//            cout << endl;
-//        }
-        
-        vis = vector<vector<bool> >(n, vector<bool>(m, false));
-        b = board;
-        w = word;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++){
-                if (b[i][j] == w[0]){
-                    vis[i][j] = true;
-                    if (search(i, j, 0)) return true;
-                    vis[i][j] = false;
-                }
+        int res = 0;
+        for (int j = 0; j  < 32; j++)
+            if (b[j] % 3 == 1){
+                res += (1 << j);
             }
-        return false;
+        return res;
     }
 };
 int main ( int argc, char *argv[] ) {
-    vector<vector<char> > vvc;
-    char * s = "ABCD";
-    vector<char> vc(s, s+4);
-    vvc.push_back(vc);
-    s = "SFCS";
-    vc = vector<char>(s, s+4);
-    vvc.push_back(vc);
-    vc = vector<char>(s, s+4);
-
-    Solution sl = Solution();
-    cout << sl.exist(vvc, "ABCB");
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    /*
+    Solution s = Solution();
+     */
+    int A[] = {1,1,1,3};
+    cout << Solution().singleNumber(A, 4) << endl;
+    return EXIT_SUCCESS;
 }

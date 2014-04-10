@@ -1,8 +1,13 @@
 #include <cmath>
+#include <set>
+#include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -58,7 +63,9 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printV(a) printA(a,0,a.size()-1)
+#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -72,61 +79,78 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+struct node{
+    int x, y;
+    node(int x1, int y1){
+        x = x1, y = y1;
+    }
+};
 class Solution {
 private:
     int n, m;
-    vector<vector<bool> >vis;
-    vector<vector<char> >b;
-    string w;
+    const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 public:
-    bool search(int i, int j, int len){
-        if (len == w.length() - 1) return true;
-        for (int d = 0; d < 4; d++){
-            int x = fx[d][0] + i;
-            int y = fx[d][1] + j;
-            if (0 <= x && x < n && 0 <= y && y < m && !vis[x][y] && b[x][y] == w[len+1]){
-                vis[x][y] = true;
-                if (search(x, y, len+1)) return true;
-                vis[x][y] = false;
-            }
-        }
-        return false;
-    }
-    bool exist(vector<vector<char> > &board, string word) {
-        n = board.size();
-        m = board[0].size();
-//        for (int i = 0; i < n; i++){
-//            for (int j = 0; j < m; j++)
-//                cout << board[i][j];
-//            cout << endl;
-//        }
-        
-        vis = vector<vector<bool> >(n, vector<bool>(m, false));
-        b = board;
-        w = word;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++){
-                if (b[i][j] == w[0]){
-                    vis[i][j] = true;
-                    if (search(i, j, 0)) return true;
-                    vis[i][j] = false;
+    void floodfill(int x, int y, vector<vector<char>> &board){
+        queue<node> q;
+        board[x][y] = '.';
+        q.push(node(x,y));
+        while(!q.empty()){
+            node h = q.front(); q.pop();
+            int x = h.x, y = h.y;
+            for (int d = 0; d < 4; d++){
+                int xx = fx[d][0] + x;
+                int yy = fx[d][1] + y;
+                if (0 <= xx && xx < n && 0 <= yy && yy < m && board[xx][yy] == 'O'){
+                    board[xx][yy] = '.';
+                    q.push(node(xx,yy));
                 }
             }
-        return false;
+        }
+    }
+    void solve(vector<vector<char>> &board) {
+        n = board.size();
+        if (n == 0) return;
+        m = board[0].size();
+        for (int i = 0; i < n; i++){
+            if (board[i][0] == 'O') floodfill(i, 0, board);
+            if (board[i][m-1] == 'O') floodfill(i, m-1, board);
+        }
+        for (int j = 0; j < m; j++){
+            if (board[0][j] == 'O') floodfill(0, j, board);
+            if (board[n-1][j] == 'O') floodfill(n-1, j, board);
+        }
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++) 
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                else if (board[i][j] == '.') board[i][j] = 'O';
     }
 };
 int main ( int argc, char *argv[] ) {
-    vector<vector<char> > vvc;
-    char * s = "ABCD";
-    vector<char> vc(s, s+4);
-    vvc.push_back(vc);
-    s = "SFCS";
-    vc = vector<char>(s, s+4);
-    vvc.push_back(vc);
-    vc = vector<char>(s, s+4);
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
 
-    Solution sl = Solution();
-    cout << sl.exist(vvc, "ABCB");
+    vector<vector<char> > m;
+    char mm[][7] = {"OXXXXX", "XXOOXX", "XXOOXX", "XXXXXX"}; 
+    for (int i = 0; i < 4; i++){
+        vector<char> m1(mm[i], mm[i]+6);
+        m.push_back(m1);
+    }
+    Solution s = Solution();
+    s.solve(m);
+    printVV(m);
+    return EXIT_SUCCESS;
 }

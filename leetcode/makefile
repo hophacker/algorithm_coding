@@ -1,4 +1,4 @@
-target= palindrome-partitioning
+target= word-break-ii
 
 
 all:
