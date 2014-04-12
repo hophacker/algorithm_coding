@@ -1,7 +1,7 @@
-target= 32013p0
+target= QR2014D
 
 all:
-	g++ -o $(target) -g $(target).cpp -std=c++11
+	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated
 
 .PHONY: run debug read
 

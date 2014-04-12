@@ -110,21 +110,6 @@ public:
     }
 };
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    getI(T);
-    int T;
-    FE(cases,1,T){
-        printf("Cases #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
 
     int A[] = {4,5,6,7,0,1,2};
     cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
