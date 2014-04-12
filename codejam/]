@@ -1,4 +1,4 @@
-target= QR2014D
+target= QR2014C
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated

@@ -1,9 +1,14 @@
 #include <cmath>
+#include "leetcode.h"
+#include <set>
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +65,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -80,38 +86,61 @@ ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
 public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
+    void reverse(ListNode*& h, ListNode*& t){
+        ListNode* h1 = h->next, *end = h;
+        while(h1 != t){
+            ListNode* h2 = h1->next;
+            h1->next = h;
+            h = h1;
+            h1 = h2;
         }
-        if (A[L] == target) return L;
-        else return -1;
+        t->next = h;
+        h = t;
+        t = end;
+    }
+    ListNode *reverseBetween(ListNode *head, int m, int n) {
+        if (m == n) return head;
+        ListNode* h = head, *t, *cur, *pre = NULL, *next;
+        for (int i = 1; i < m; i++) {
+            pre = h;
+            h = h->next;
+        }
+        t = h;
+        for (int i = 0; i < n-m; i++) t = t->next;
+        next = t->next;
+        reverse(h, t);
+        if (pre == NULL){
+            t->next = next;
+            return h;
+        }else{
+            pre->next = h;
+            t->next = next;
+            return head;
+        }
     }
 };
 int main ( int argc, char *argv[] ) {
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    Solution s = Solution();
 
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+    ListNode* head = new ListNode(5);
+    addNode(head, 4);
+    addNode(head, 3);
+    addNode(head, 2);
+    addNode(head, 1);
+    printList(head);
+    head = s.reverseBetween(head, 1, 2);
+    printList(head);
     return EXIT_SUCCESS;
 }

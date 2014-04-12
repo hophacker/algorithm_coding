@@ -1,9 +1,14 @@
 #include <cmath>
+#include "leetcode.h"
+#include <set>
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +65,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -78,40 +84,53 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+struct node{
+    TreeNode* cur;
+    int lev;
+    node(TreeNode* c, int l){
+        cur = c;
+        lev = l;
+    }
+};
 class Solution {
 public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
+    vector<vector<int> > levelOrderBottom(TreeNode *root) {
+        vector<vector<int> > res;
+        queue<node> q;
+        q.push(node(root,0));
+        while(!q.empty()){
+            node h = q.front();
+            q.pop();
+            if (h.cur == NULL) continue;
+            if (res.size() < h.lev + 1) res.push_back(vector<int>());
+            res[h.lev].push_back(h.cur->val);
+            q.push(node(h.cur->left, h.lev+1));
+            q.push(node(h.cur->right, h.lev+1));
         }
-        if (A[L] == target) return L;
-        else return -1;
+        for (int i = 0; i < res.size(); i++)
+            if (i % 2){
+                reverse(res[i].begin(), res[i].end());
+            }
+        return res;
     }
 };
 int main ( int argc, char *argv[] ) {
-
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    /*
+    Solution s = Solution();
+     */
+    whileZ{
+    }
     return EXIT_SUCCESS;
 }

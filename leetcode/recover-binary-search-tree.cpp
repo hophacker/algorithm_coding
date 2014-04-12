@@ -1,9 +1,14 @@
 #include <cmath>
+#include <set>
+#include "leetcode.h"
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +65,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -79,39 +85,53 @@ ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
+private:
+    TreeNode *n1 = NULL, *n2 = NULL, *pre = NULL;
 public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
+    /* 
+     * pre keeps track nearest left node of cur
+     * The idea: for every node, compare it's nearest left one with it
+     */
+    void inorder(TreeNode* cur){
+        if (!cur) return;
+        else{
+            inorder(cur->left);
+            if (pre){
+                if (pre->val > cur->val){
+                    if (!n1){
+                        n1 = pre;
+                        n2 = cur;
+                    }else n2 = cur;
                 }
             }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
+            pre = cur;
+            inorder(cur->right);
         }
-        if (A[L] == target) return L;
-        else return -1;
+    }
+    void recoverTree(TreeNode *root) {
+        inorder(root);
+        if (n1 && n2) swap(n1->val, n2->val);
     }
 };
 int main ( int argc, char *argv[] ) {
-
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    Solution s = Solution();
+    TreeNode* root = new TreeNode(1);
+    TreeNode* n1 = new TreeNode(2);
+    root->left = n1;
+    printTree(root);
+    s.recoverTree(root);
+    printTree(root);
     return EXIT_SUCCESS;
 }

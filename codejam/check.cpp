@@ -1,9 +1,13 @@
 #include <cmath>
+#include <set>
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +64,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -77,41 +82,63 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
-class Solution {
-public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }
-        if (A[L] == target) return L;
-        else return -1;
+const int fx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {1,1}, {-1,1}};
+char board[60][60];
+int R, C, M;
+int mines(int i, int j){
+    int c = 0;
+    for (int d = 0; d < 8; d++){
+        int ii = i + fx[d][0];
+        int jj = j + fx[d][1];
+        if (LIN(ii,0,R) && LIN(jj,0,C) && board[ii][jj] == '*') c++;
     }
-};
-int main ( int argc, char *argv[] ) {
+    return c;
+}
+int c = 0;
+void go(int i, int j){
+    c++;
+    board[i][j] = 'x';
+    if (mines(i,j) == 0){
+        for (int d = 0; d < 8; d++){
+            int ii = i + fx[d][0];
+            int jj = j + fx[d][1];
+            if (LIN(ii,0,R) && LIN(jj,0,C) && board[ii][jj] == '.')
+                go(ii,jj);
+        }
+    }
 
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+}
+bool check(int i, int j){
+    c = 0;
+    go(0,0);
+/*     F(i,0,R){ 
+ *         F(j,0,C) printf("%c", board[i][j]);
+ *         printf("\n");
+ *            
+ *     }
+ */
+    F(i,0,R) F(j,0,C){
+        if (board[i][j] == '.') return false;
+    }
+    return true;
+/*     c = 0;
+ *     F(i,0,R) F(j,0,C){
+ *         if (board[i][j] == '.' || board[i][j] == 'x'){
+ *             c++;
+ *             if (mines(i,j) == 0) clear(i,j);
+ *         }
+ *     }
+ *     F(i,0,R) F(j,0,C) if (board[i][j] == '.') return false;
+ *     return true;
+ */
+}
+int main ( int argc, char *argv[] ) {
+    while(~scanf("%d %d %d\n", &R, &C, &M)){
+        F(i,0,R) scanf("%s", board[i]);
+        board[0][0] = '.';
+        if (!check(0,0) || c != M){
+            cout << R << ' ' << C << ' ' << M << ' ' << c << endl;
+        }
+    }
     return EXIT_SUCCESS;
 }

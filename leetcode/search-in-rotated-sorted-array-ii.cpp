@@ -80,12 +80,19 @@ ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
 public:
-    int search(int A[], int n, int target) {
+    bool search(int A[], int n, int target) {
         int L = 0, R = n-1;
-        if (target >= A[0]){
+        while(L < R){
+            int M = (L + R) >> 1;
+            if (A[M])
+        }
+        if (target > A[0]){
             while(L < R){
                 int M = (L + R) >> 1;
                 if (A[M] < A[0]) R = M-1;
+                else if (A[M] == A[0]){
+
+                }
                 else{
                     if (A[M] < target)
                         L = M+1;
@@ -93,7 +100,7 @@ public:
                         R = M;
                 }
             }
-        }else{
+        }else if (target < A[0]){
             while(L < R){
                 int M = (L + R) >> 1;
                 if (A[M] >= A[0]) L = M+1;
@@ -104,14 +111,14 @@ public:
                         R = M;
                 }
             }
-        }
-        if (A[L] == target) return L;
-        else return -1;
+        }else return true;
+
+        return (A[L] == target);
     }
 };
 int main ( int argc, char *argv[] ) {
 
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+    int A[] = {1,3,1,1,1};
+    cout << Solution().search(A, sizeof(A)/sizeof(int), 3) << endl;
     return EXIT_SUCCESS;
 }

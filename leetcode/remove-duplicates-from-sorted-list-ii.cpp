@@ -1,9 +1,14 @@
 #include <cmath>
+#include "leetcode.h"
+#include <set>
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +65,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -78,40 +84,64 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
 class Solution {
 public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
+    ListNode *deleteDuplicates(ListNode *head) {
+        ListNode *tail = NULL, *h = head;
+        head = NULL;
+        while(h != NULL){
+            if (h->next != NULL && h->val == h->next->val){
+                int val = h->val;
+                while(h != NULL && h->val == val){
+                    ListNode* temp = h;
+                    h = h->next;
+                    free(temp);
                 }
-            }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
+            }else{
+
+                if (head){
+                    tail->next = h;
+                    tail = h;
+                }else head = tail = h;
+
+                h = h->next;
             }
         }
-        if (A[L] == target) return L;
-        else return -1;
+        if (tail) tail->next = NULL;
+        return head;
     }
 };
 int main ( int argc, char *argv[] ) {
-
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    Solution s = Solution();
+    ListNode* head = new ListNode(1);
+    addNode(head, 1);
+    addNode(head, 2);
+    addNode(head, 3);
+    addNode(head, 3);
+    addNode(head, 4);
+    printList(head);
+    head = s.deleteDuplicates(head);
+    printList(head); 
     return EXIT_SUCCESS;
 }

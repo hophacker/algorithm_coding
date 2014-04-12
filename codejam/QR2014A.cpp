@@ -1,9 +1,13 @@
 #include <cmath>
+#include <set>
 #include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -60,7 +64,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1)
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -77,41 +82,36 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
-class Solution {
-public:
-    int search(int A[], int n, int target) {
-        int L = 0, R = n-1;
-        if (target >= A[0]){
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] < A[0]) R = M-1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }else{
-            while(L < R){
-                int M = (L + R) >> 1;
-                if (A[M] >= A[0]) L = M+1;
-                else{
-                    if (A[M] < target)
-                        L = M+1;
-                    else 
-                        R = M;
-                }
-            }
-        }
-        if (A[L] == target) return L;
-        else return -1;
-    }
-};
-int main ( int argc, char *argv[] ) {
 
-    int A[] = {4,5,6,7,0,1,2};
-    cout << Solution().search(A, sizeof(A)/sizeof(int), 10) << endl;
+int a[4][4];
+int card[17];
+int ar;
+void add(){
+    getI(ar);
+    F(i,0,4) F(j,0,4) getI(a[i][j]);
+    for (int j = 0; j < 4; j++)
+        card[a[ar-1][j]]++;
+}
+int judge(){
+    int c = -1, cn = 0;
+    for (int i = 1; i <= 16; i++){
+        if (card[i] == 2) c = i, cn++;
+    }
+    if (cn > 1) return -1;
+    else if (cn == 1) return c;
+    else return 0;
+}
+int main ( int argc, char *argv[] ) {
+   int cases = 0;
+   whileZ{
+        clr(card, 0);
+        add();
+        add();
+        printf("Case #%d: ", ++cases);
+        int j = judge();
+        if (j == -1) printf("Bad magician!\n");
+        else if (j == 0) printf("Volunteer cheated!\n");
+        else printf("%d\n", j);
+    }
     return EXIT_SUCCESS;
 }
