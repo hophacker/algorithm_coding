@@ -86,25 +86,38 @@ const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
 public:
     bool searchMatrix(vector<vector<int> > &matrix, int target) {
+        int n = matrix.size();
+        if (n == 0) return false;
+        int m = matrix[0].size();
+        int L = 0, R = n-1;
+        while(L < R){
+            int M = (L+R)/2+1;
+            if (matrix[M][0] <= target) L = M;
+            else R = M-1;
+        }
+        if (matrix[L][0] > target) return false;
+        int k = L;
+        L = 0, R = m-1;
+        while(L < R){
+            int M = (L+R)/2+1;
+            if (matrix[k][M] <= target) L = M;
+            else R = M-1;
+        }
+        return matrix[k][L] == target;
     }
 };
 int main ( int argc, char *argv[] ) {
     /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
     }*/
-    /*
-    getI(T);
-    int T;
-    FE(cases,1,T){
-        printf("Cases #%d: ", cases);
-    }
-    }*/
-    /*
     Solution s = Solution();
-     */
-    whileZ{
+    int a[3][4] = {{1,3,5,7},{10,11,16,20},{23,30,34,50}};
+    vector<vector<int> >A;
+    A.push_back(vector<int>(a[0], a[0]+4));
+    A.push_back(vector<int>(a[1], a[1]+4));
+    A.push_back(vector<int>(a[2], a[2]+4));
+    int d;
+    while(cin >> d){
+        cout << s.searchMatrix(A, d) << endl;
     }
     return EXIT_SUCCESS;
 }

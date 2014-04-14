@@ -82,62 +82,73 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+class Solution {
+private:
+    const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+#define LIN(i,l,r) (l<=i&&i<r)
+public:
+    vector<int> spiralOrder(vector<vector<int> > &matrix) {
+        vector<int> res;
+        int c = 0, d = 0, x = 0, y = -1;
+        int n = matrix.size();
+        if (n == 0) return res;
+        int m = matrix[0].size();
+
+
+        bool turn = false;
+        int k;
+        for (;n >= 1 && m >= 1;){
+            if (turn) k = n, m--;
+            else k = m, n--;
+            turn = !turn;
+
+            for (int i = 0; i < k; i++){
+                x += fx[d][0];
+                y += fx[d][1];
+                res.push_back(matrix[x][y]);
+            }
+            d += 1;
+            if (d  ==  4) d = 0;
+        }
+        return res;
+    }
+    vector<vector<int> > generateMatrix(int n) {
+        vector<vector<int> > res(n, vector<int>(n, 0));
+        int c = 0, d = 0, x = 0, y = -1;
+        for (int i = n; i >= 1; i--){
+            int k = 2;
+            if (i == n) k = 1;
+            for (int times = 0; times < k; times++){
+                for (int j = 0; j < i; j++){
+                    x += fx[d][0];
+                    y += fx[d][1];
+                    res[x][y] = ++c;
+                }
+                d += 1;
+                if (d  ==  4) d = 0;
+            }
+        }
+        return res;
+    }
 };
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-struct Interval {
-    int start;
-    int end;
-    Interval() : start(0), end(0) {}
-    Interval(int s, int e) : start(s), end(e) {}
-};
-
-void printIntervals(vector<Interval> i){
-    F(j,0,i.size()){
-        cout << i[j].start << ' ' << i[j].end << endl;
+int main ( int argc, char *argv[] ) {
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
     }
-}
-void printTree(TreeNode* cur){
-    if (cur == NULL) return;
-    cout << cur->val << ' ';
-
-    if (cur->left == NULL) cout << "NULL" << ' ';
-    else {
-        cout << cur->left->val << ' ';
-    }
-
-    if (cur->right == NULL) cout << "NULL" << endl;
-    else {
-        cout << cur->right->val << endl;
-    }
-    printTree(cur->left);
-    printTree(cur->right);
-}
-void addNode(ListNode* &head, int x){
-    ListNode *a = new ListNode(x);
-    if (head == NULL){
-        head = a;
-    }else{
-        a->next = head;
-        head = a;
-    }
-}
-void printList(ListNode* head){
-    while(head != NULL){
-        cout << head->val << ' ';
-        head = head->next;
-    }
-    cout << endl;
+    }*/
+    Solution s = Solution();
+    vvi res = s.generateMatrix(4);
+    res.pop_back();
+    printVV(res);
+    vi so = s.spiralOrder(res);
+    printV(so);
+    return EXIT_SUCCESS;
 }

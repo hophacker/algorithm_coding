@@ -1,4 +1,4 @@
-target= path-sum-ii
+target= spiral-matrix
 
 
 all:

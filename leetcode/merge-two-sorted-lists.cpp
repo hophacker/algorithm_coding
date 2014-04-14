@@ -1,4 +1,5 @@
 #include <cmath>
+#include "leetcode.h"
 #include <set>
 #include <list>
 #include <unordered_set>
@@ -82,62 +83,51 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+class Solution {
+private:
+    ListNode *h = NULL, *t = NULL;
+public:
+    void add(ListNode* n){
+        if (h == NULL) h = t = n;
+        else{
+            t->next = n;
+            t = n;
+        }
+    }
+    ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
+        while(l1 != NULL && l2 != NULL){
+            if (l1->val < l2->val) add(l1), l1 = l1->next;
+            else add(l2), l2 = l2->next;
+        }
+        if (l1 != NULL) while(l1 != NULL) add(l1), l1 = l1->next;
+        if (l2 != NULL) while(l2 != NULL) add(l2), l2 = l2->next;
+        if (t != NULL)
+            t->next = NULL;
+        return h;
+    }
 };
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-struct Interval {
-    int start;
-    int end;
-    Interval() : start(0), end(0) {}
-    Interval(int s, int e) : start(s), end(e) {}
-};
-
-void printIntervals(vector<Interval> i){
-    F(j,0,i.size()){
-        cout << i[j].start << ' ' << i[j].end << endl;
+int main ( int argc, char *argv[] ) {
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
     }
-}
-void printTree(TreeNode* cur){
-    if (cur == NULL) return;
-    cout << cur->val << ' ';
+    }*/
+    Solution s = Solution();
+    ListNode* h1 = new ListNode(2);
+    addNode(h1, 1);
 
-    if (cur->left == NULL) cout << "NULL" << ' ';
-    else {
-        cout << cur->left->val << ' ';
-    }
+    ListNode* h2 = new ListNode(3);
+    addNode(h2, 2);
 
-    if (cur->right == NULL) cout << "NULL" << endl;
-    else {
-        cout << cur->right->val << endl;
-    }
-    printTree(cur->left);
-    printTree(cur->right);
-}
-void addNode(ListNode* &head, int x){
-    ListNode *a = new ListNode(x);
-    if (head == NULL){
-        head = a;
-    }else{
-        a->next = head;
-        head = a;
-    }
-}
-void printList(ListNode* head){
-    while(head != NULL){
-        cout << head->val << ' ';
-        head = head->next;
-    }
-    cout << endl;
+    ListNode* h = s.mergeTwoLists(NULL, NULL);
+    printList(h);
+    return EXIT_SUCCESS;
 }

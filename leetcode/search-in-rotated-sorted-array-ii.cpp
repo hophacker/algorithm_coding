@@ -82,17 +82,15 @@ class Solution {
 public:
     bool search(int A[], int n, int target) {
         int L = 0, R = n-1;
-        while(L < R){
-            int M = (L + R) >> 1;
-            if (A[M])
+        if (A[0] == target) return true;
+        if (A[0] == A[R]){
+            while(R >= 0 && A[R] == A[0]) R--;
         }
-        if (target > A[0]){
+
+        if (target >= A[0]){
             while(L < R){
                 int M = (L + R) >> 1;
                 if (A[M] < A[0]) R = M-1;
-                else if (A[M] == A[0]){
-
-                }
                 else{
                     if (A[M] < target)
                         L = M+1;
@@ -100,7 +98,7 @@ public:
                         R = M;
                 }
             }
-        }else if (target < A[0]){
+        }else{
             while(L < R){
                 int M = (L + R) >> 1;
                 if (A[M] >= A[0]) L = M+1;
@@ -111,14 +109,13 @@ public:
                         R = M;
                 }
             }
-        }else return true;
-
+        }
         return (A[L] == target);
     }
 };
 int main ( int argc, char *argv[] ) {
 
-    int A[] = {1,3,1,1,1};
+    int A[] = {1,3};
     cout << Solution().search(A, sizeof(A)/sizeof(int), 3) << endl;
     return EXIT_SUCCESS;
 }

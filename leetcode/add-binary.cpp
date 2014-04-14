@@ -82,62 +82,33 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-using namespace std;
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        string res; 
+        res.reserve(max(a.length(), b.length())+1);
+        bool carry = 0;
+        for (int i = 0; i < max(a.length(), b.length()); i++){
+            int c = carry;
+            if (i < a.length() && a[i] == '1') c++;
+            if (i < b.length() && b[i] == '1') c++;
+            if (c == 3) carry = 1, res.push_back('1');
+            else if (c == 2) carry = 1, res.push_back('0');
+            else if (c == 1) carry = 0, res.push_back('1');
+            else if (c == 0) carry = 0, res.push_back('0');
+        }
+        if (carry) res.push_back('1');
+        reverse(res.begin(), res.end());
+        return res;
+    }
 };
-
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-struct Interval {
-    int start;
-    int end;
-    Interval() : start(0), end(0) {}
-    Interval(int s, int e) : start(s), end(e) {}
-};
-
-void printIntervals(vector<Interval> i){
-    F(j,0,i.size()){
-        cout << i[j].start << ' ' << i[j].end << endl;
-    }
-}
-void printTree(TreeNode* cur){
-    if (cur == NULL) return;
-    cout << cur->val << ' ';
-
-    if (cur->left == NULL) cout << "NULL" << ' ';
-    else {
-        cout << cur->left->val << ' ';
-    }
-
-    if (cur->right == NULL) cout << "NULL" << endl;
-    else {
-        cout << cur->right->val << endl;
-    }
-    printTree(cur->left);
-    printTree(cur->right);
-}
-void addNode(ListNode* &head, int x){
-    ListNode *a = new ListNode(x);
-    if (head == NULL){
-        head = a;
-    }else{
-        a->next = head;
-        head = a;
-    }
-}
-void printList(ListNode* head){
-    while(head != NULL){
-        cout << head->val << ' ';
-        head = head->next;
-    }
-    cout << endl;
+int main ( int argc, char *argv[] ) {
+    /*{
+    }*/
+    Solution s = Solution();
+    cout << s.addBinary("101", "101") << endl;
+    return EXIT_SUCCESS;
 }

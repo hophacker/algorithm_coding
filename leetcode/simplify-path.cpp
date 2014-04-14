@@ -74,21 +74,50 @@ template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {r
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
 const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
 class Solution {
+private:
+    vector<string> res;
 public: 
-    vector<string> split(string& s, string seperator){
-        int i = 0;
-        vector<string> res;
-        while(true){
-            int j = s.find(seperator, i);
-            if (j != i){
-                res.
-            }
+    void deal(string dir){
+        if (dir == "..") {
+            if (!res.empty()) res.pop_back();
         }
+        else if (dir == ".");
+        else res.push_back(dir);
+    }
+    string construct(){
+        if (res.size() == 0) return "/";
+        string str;
+        for (int i = 0; i < res.size(); i++){
+            str.append("/" + res[i]);
+        }
+        return str;
     }
     string simplifyPath(string path) {
-        
+        int i = 0, j;
+        string dir;
+        while(i < path.length()){
+            while((j=path.find('/', i)) == i)
+                i += 1;
+            if (i >= path.length()) break;
+            if (j == string::npos){
+                deal(path.substr(i));
+                break;
+            }else{
+                deal(path.substr(i, j-i));
+                i = j+1;
+            }
+        }
+        return construct();
     }
 };
 int main ( int argc, char *argv[] ) {
+    cout << Solution().simplifyPath("/a/./b///../c/../././../d/..//../e/./f/./g/././//.//h///././/..///") << endl;
+    cout << Solution().simplifyPath("/home/..//./foo/") << endl;
+    cout << Solution().simplifyPath("/a/./b/../../c/") << endl;
+    cout << Solution().simplifyPath("/a//b/../../c/../") << endl;
+    cout << Solution().simplifyPath("/a/..//../b/../../c/../") << endl;
+    cout << Solution().simplifyPath("../") << endl;
+
+
     return EXIT_SUCCESS;
 }
