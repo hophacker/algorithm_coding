@@ -1,4 +1,4 @@
-target= spiral-matrix
+target= substring-with-concatenation-of-all-words
 
 
 all:
