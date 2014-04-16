@@ -1,4 +1,4 @@
-target= spiral-matrix
+target= sudoku-solver
 
 
 all:
