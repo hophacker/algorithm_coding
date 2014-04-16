@@ -1,4 +1,4 @@
-target= sudoku-solver
+target= substring-with-concatenation-of-all-words
 
 
 all:
