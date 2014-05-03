@@ -1,4 +1,4 @@
-target= 4140
+target= 427D
 
 all:
 	g++ -o $(target) -g $(target).cpp -w -std=c++11

@@ -1,8 +1,15 @@
+#undef debug
+#undef outputNo
 #include <cmath>
+#include <set>
+#include <list>
+#include <unordered_set>
+#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -58,8 +65,9 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printV(a) printA(a,0,a.size()-1)
-#define MAXN 10000
+#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 
@@ -72,24 +80,40 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
-string printDouble(double& num){
-    stringstream buffer;
-    buffer << num;
-}
-int main ( int argc, char *argv[] ) {
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
+#define MAXN 1010
+int N, NN;
 int a[1000];
-    int N = 1000;
-    int T  = 1200;
-    cout << T << endl;
-     for (int t  = 0; t < T; t++){
-        F(i,0,N) a[i] = i;
-        F(i,0,N){
-            int p = rand()%N;
-             swap(a[i], a[p]);
-         }
-        cout << 1000 << endl;
-         printA(a, 0, 999);
-     }
+int main ( int argc, char *argv[] ) {
+    int cases = 0;
+/*     for (int t  = 0; t < 100000; t++){
+ *         F(i,0,N) a[i] = i;
+ *         F(i,0,N){
+ *             int p = rand()%N;
+ *             swap(a[i], a[p]);
+ *         }
+ *         int sum = 0;
+ *         F(i,0,N)
+ *             F(j,i+1,N) if (a[j] < a[i]) sum++;
+ *         aa[sum]++;
+ *     }
+ *     printA(aa, 0, NN);
+ *     return 0;
+ */
+    int Good = 0;
+    whileZ{
+        printf("Case #%d: ", ++cases);
+        getI(N);
+        NN = (N-1) * N/2;
+        int Mid = (0+NN) >> 1;
+        F(i,0,N) getI(a[i]);
+        int sum = 0;
+        F(i,0,N)
+            F(j,i+1,N) if (a[j] < a[i]) sum++;
+        if (abs(sum-Mid) < 10000) printf("BAD\n");
+        else printf("GOOD\n"), Good++;
+    }
     return EXIT_SUCCESS;
 }

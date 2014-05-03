@@ -1,8 +1,11 @@
 #include <cmath>
+#include <set>
+#include <list>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -58,7 +61,9 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printV(a) printA(a,0,a.size()-1)
+#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -72,24 +77,96 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
-string printDouble(double& num){
-    stringstream buffer;
-    buffer << num;
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
+#define maxN 100005
+struct node{
+    int index, fin, cost;
+};
+bool cmpFin(const node& a, const node& b){
+    return a.fin > b.fin;
+}
+int n, m;
+int cost[maxN];
+node ver[maxN];
+bool vis[maxN];
+int block[maxN], blockN = 0;
+vector<int> rel[maxN], rel1[maxN];
+int T = 0;
+void dfs(int u){
+    vis[u] = true;
+    T++;
+    for (vector<int>::iterator v = rel[u].begin(); v != rel[u].end(); v++){
+        if (!vis[*v]) dfs(*v);
+    }
+    T++;
+    ver[u].fin = T;
+}
+void dfs1(int u){
+    vis[u] = true;
+    block[u] = blockN;
+    for (vector<int>::iterator v = rel1[u].begin(); v != rel1[u].end(); v++){
+        if (!vis[*v]) dfs1(*v);
+    }
 }
 int main ( int argc, char *argv[] ) {
-int a[1000];
-    int N = 1000;
-    int T  = 1200;
-    cout << T << endl;
-     for (int t  = 0; t < T; t++){
-        F(i,0,N) a[i] = i;
-        F(i,0,N){
-            int p = rand()%N;
-             swap(a[i], a[p]);
-         }
-        cout << 1000 << endl;
-         printA(a, 0, 999);
-     }
+    /*{
+    FILE* file = fopen(argv[1], "r");
+    int a, b;
+    while(fscanf(file, "%d,%d", &a, &b) != EOF){
+    }*/
+    /*
+    getI(T);
+    int T;
+    FE(cases,1,T){
+        printf("Cases #%d: ", cases);
+    }
+    }*/
+    /*
+    Solution s = Solution();
+     */
+    getI(n);
+    F(i,0,n) getI(cost[i]);
+    getI(m);
+    F(i,0,m){
+        wez2(x,y);
+        x--;
+        y--;
+        rel[x].push_back(y);
+        rel1[y].push_back(x);
+    }
+    clr(vis, 0);
+    F(i,0,n) ver[i].index = i;
+    F(i,0,n)if (!vis[i]) dfs(i);
+
+
+
+    sort(ver, ver+n, cmpFin);
+
+    clr(vis, 0);
+    F(i,0,n){
+        if (!vis[ver[i].index]){
+            dfs1(ver[i].index);
+            blockN++;
+        }
+    }
+
+    vector<int> minCost(blockN, INT_MAX), conJuns(blockN, 0);
+    F(i,0,n){
+        int b = block[i];
+        if (cost[i] < minCost[b]){
+            minCost[b] = cost[i];
+            conJuns[b] = 1;
+        }else if (cost[i] == minCost[b]){
+            conJuns[b] ++;
+        }
+    }
+    ll costTotal = 0, wayTotal = 1;
+    F(i,0,blockN){
+        costTotal += minCost[i];
+        wayTotal = wayTotal * conJuns[i] % 1000000007;
+    }
+    cout << costTotal << ' ' << wayTotal << endl;
     return EXIT_SUCCESS;
 }
