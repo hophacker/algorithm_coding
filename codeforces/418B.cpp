@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -83,12 +81,45 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    FE(i,1,100)
-        FE(j,i+1,100){
-        int x = sqrt(i*i+j*j);
-        if (x*x == i*i + j*j)
-            cout << i << ' ' << j  << ' ' << x << endl;
+struct node{
+    ll money, monitor, solve;
+}a[100];
+ll f[2][1 << 20];
+ll n,k,b;
+ll solve(ll M){
+    clr(f, -1);
+    ll KK = 1 << k;
+    f[0][0] = f[1][0] =  0;
+    for (ll i = 0; i < n; i++) if (a[i].monitor <= M){
+        for (ll s = 0; s < KK; s++) if (f[0][s] != -1){
+            ll t = s | a[i].solve;
+            if (f[1][t] == -1 || f[0][s] + a[i].money < f[1][t])
+                f[1][t] = a[i].money + f[0][s];
+        }
+        memcpy(f[0], f[1], sizeof(f[0]));
     }
+    if (f[0][KK-1] == -1) return LONG_LONG_MAX;
+    else return f[0][KK-1] + b * M;
+}
+int  main( int argc, char *argv[] ) {
+    cin >> n >> k >> b;
+    for (ll i = 0; i < n; i++){
+        ll num;
+        cin >> a[i].money >> a[i].monitor >> num;
+        a[i].solve = 0;
+        F(j,0,num){
+            wez(x);
+            x--;
+            a[i].solve |= 1 << x;
+        }
+    }
+    ll minM = LONG_LONG_MAX;
+    set<ll> visited;
+    for (ll i = 0; i < n; i++) if (visited.find(a[i].monitor) == visited.end()){
+        visited.insert(a[i].monitor);
+        minM = min(minM, solve(a[i].monitor));
+    }
+    if (minM == LONG_LONG_MAX) cout << -1 << endl;
+    else cout << minM << endl;
     return EXIT_SUCCESS;
 }

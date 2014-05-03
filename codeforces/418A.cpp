@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -84,11 +82,19 @@ ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
 int main ( int argc, char *argv[] ) {
-    FE(i,1,100)
-        FE(j,i+1,100){
-        int x = sqrt(i*i+j*j);
-        if (x*x == i*i + j*j)
-            cout << i << ' ' << j  << ' ' << x << endl;
+    wez2(n,k);
+    if (k*n > (n-1)*n/2){
+        printf("-1\n");
+    }else{
+        printf("%d\n", n*k);
+        FE(i,1,n){
+            FE(j,i+1,i+k){
+                if (j <= n)
+                    printf("%d %d\n", i, j);
+                else
+                    printf("%d %d\n", i, j-n);
+            }
+        }
     }
     return EXIT_SUCCESS;
 }

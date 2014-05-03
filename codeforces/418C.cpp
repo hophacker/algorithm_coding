@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -83,12 +81,39 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    FE(i,1,100)
-        FE(j,i+1,100){
-        int x = sqrt(i*i+j*j);
-        if (x*x == i*i + j*j)
-            cout << i << ' ' << j  << ' ' << x << endl;
+#define N 10000
+bool vis[N+1];
+vector<int> a[N+1];
+int sqrt(int x, int y){
+    return sqrt(x*x+y*y);
+}
+bool searchPath(vector<int>&path, int lev, int x){
+    if (lev == path.size()) return true;
+    for (int i = 0; i < a[x].size(); i++){
+        int y = a[x][i];
+        path[lev] = a[x][i];
+        if (searchPath(path, lev+1, sqrt(x,y))) return true;
     }
+    return false;
+}
+int main ( int argc, char *argv[] ) {
+    int n, m;
+    cin  >> n >> m;
+    FE(i,1,10000)
+        FE(j,i+1,10000){
+        int x = sqrt(i*i+j*j);
+        if (x*x == i*i + j*j){
+            a[i].push_back(j);
+            a[j].push_back(i);
+        }
+    }
+    vector<int> path1(n), path2(m);
+
+    path1[0] = 3;
+    searchPath(path1, 1, 3);
+    path2[0] = 3;
+    searchPath(path2, 1, 3);
+    printV(path1);
+    printV(path2);
     return EXIT_SUCCESS;
 }

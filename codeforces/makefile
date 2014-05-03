@@ -1,7 +1,8 @@
 target= 427D
 
 all:
-	g++ -o $(target) -g $(target).cpp -w -std=c++11
+	g++ -o $(target) -g $(target).cpp -w
+#g++ -o $(target) -g $(target).cpp -w -std=c++11
 
 .PHONY: run debug
 
