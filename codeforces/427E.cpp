@@ -1,8 +1,11 @@
 #include <cmath>
+#include <set>
+#include <list>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>   
@@ -58,7 +61,9 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printV(a) printA(a,0,a.size()-1)
+#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -72,24 +77,21 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-const int fx[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
-string printDouble(double& num){
-    stringstream buffer;
-    buffer << num;
-}
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
+#define maxN 1000005
+
+int x[maxN];
 int main ( int argc, char *argv[] ) {
-int a[1000];
-    int N = 1000;
-    int T  = 1200;
-    cout << T << endl;
-     for (int t  = 0; t < T; t++){
-        F(i,0,N) a[i] = i;
-        F(i,0,N){
-            int p = rand()%N;
-             swap(a[i], a[p]);
-         }
-        cout << 1000 << endl;
-         printA(a, 0, 999);
-     }
-    return EXIT_SUCCESS;
+    wez2(n,m);
+    F(i,0,n) getI(x[i]);
+    ll dis = 0;
+    int L = 0, R = n-1;
+    while(L < R){
+        dis += (ll)(x[R]-x[L]) * 2;
+        L += m;
+        R -= m;
+    }
+    cout << dis << endl;
 }
