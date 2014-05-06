@@ -1,4 +1,4 @@
-target= R1A2014C
+target= R1B2014B
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated
