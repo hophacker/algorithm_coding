@@ -1,4 +1,4 @@
-target= R1B2014B
+target= manyPrices
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated
