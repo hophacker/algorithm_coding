@@ -1,8 +1,15 @@
-CFLAGS=-g
-CC=g++
-obj= JAN14FRBSUM
-objects:$(obj)
-$(obj):$(obj).o
+target= Sereja-and-Game
 
-%.o:%.cpp
-	$(CC) $(CFLAGS) -c $<
+all:
+	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated
+
+.PHONY: run debug read
+
+run:
+	./${target} < in | tee out
+
+debug:
+	gdb ${target}
+
+read:
+	vim -R ${target}.cpp
