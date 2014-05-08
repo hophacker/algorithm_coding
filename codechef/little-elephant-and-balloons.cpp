@@ -45,7 +45,7 @@ using namespace std;
 #define FOREACH(i,t) for (typeof(t.begin()) i=t.begin(); i!=t.end(); i++)
 #define ALL(t) t.begin(),t.end()
 #define ll long long
-#define ull unsigned long long
+#define ull unsigned ll
 #define ui unsigned int
 #define us unsigned short
 #define IOS ios_base::sync_with_stdio(0);
@@ -83,29 +83,86 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+struct node{
+    double avg;
+    ull types;
+    node(){};
+    node(double a, ull t):avg(a),types(t){};
+};
+
+ull C[41][41];
+void prepare(){
+    C[1][0] = C[1][1] = 1;
+    FE(n,2,40){
+        C[n][0] = 1;
+        FE(k,1,n)
+            C[n][k] = C[n-1][k-1] + C[n-1][k];
+    }
+}
+node f[2][41][41];
+
+void printNode(int pre, int bTotalNum, int cNum){
+    cout << bTotalNum << ' ' << cNum << ':' << f[pre][bTotalNum][cNum].types << ' ' << f[pre][bTotalNum][cNum].avg << endl;
+}
+
 int main ( int argc, char *argv[] ) {
-    double f[2][41][41];
+    prepare();
     whileZ{
         wez2(n,m);
-        vector<vector<int> > b(40, vector<int>());
-        vector<double> avgP(40);
+        vector<int> price(40,0);
+        vector<double> avgP(40, 0);
         F(i,0,n){
             wez2(c, p);
-            b[c--].push_back(p);
+            c--;
+            price[c]++;
+            avgP[c] += p;
         }
-        F(i,0,40){
-            double P = 0;
-            F(j,0,b[i].size()) P += b[i][j];
-            if (b[i].size() == 0) avgP[i] = 0;
-            else avgP[i] = P / b[i].size();
+        int pN = 0;
+        F(i,0,40)if (price[i]){
+            price[pN] = price[i];
+            avgP[pN] = avgP[i];
+            pN++;
         }
+        F(i,0,pN) avgP[i] /= price[i];
 
-        int pre ZZZZZZ, now;
-        F(i,0,40){
-            FE(bNum, 0, b[i].size()){
+        FE(i,0,n)
+            FE(j,0,pN) f[1][i][j] = node(0,0);
 
+        f[1][0][0].types = 1;
+        f[1][0][0].avg = 0;
+
+        F(i,0,pN){
+            memcpy(f[0], f[1], sizeof(f[1]));
+
+            FE(bNum, 1, price[i]){
+                FE(bTotalNum,0,n)
+                    FE(cNum,0,pN) if (f[0][bTotalNum][cNum].types){
+                        double avg = f[0][bTotalNum][cNum].avg + bNum * avgP[i];
+                        ull types = f[0][bTotalNum][cNum].types * C[price[i]][bNum];
+                        node fPre = f[1][bTotalNum+bNum][cNum+1];
+                        f[1][bTotalNum+bNum][cNum+1] = node((avg*types + fPre.avg * fPre.types)/(types+fPre.types), types+fPre.types);
+                    }
+            }
+
+/*             cout << i << "---------------------" << endl;
+ *             FE(bTotalNum,0,n)
+ *                 FE(cNum,0,pN) 
+ *                     printNode(1, bTotalNum, cNum);
+ */
+
+
+        }
+        ull types = 0;
+        double totalScore = 0;
+        FE(i,m,pN){
+            FE(j,i,n){
+                types += f[1][j][i].types;
+                totalScore += f[1][j][i].types * f[1][j][i].avg;
             }
         }
+        if (types == 0) printf("0\n");
+        else printf("%.10lf\n", totalScore/types);
     }
     return EXIT_SUCCESS;
 }
