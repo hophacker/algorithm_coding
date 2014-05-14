@@ -69,44 +69,8 @@ void deleteOne(){
     }
 }
 int main ( int argc, char *argv[] ) {
-    int T;
-    getI(T);
-    while(T--){
-        getII(n,m);
-       FE(i,1,n) link[i].clear();
-        // clear begin
-        clr(vis,0);
-        clr(a,0);
-        clr(in,0);
-        // clear end
-        int u, v;
-        F(i,0,m){
-            getII(u,v);
-            if (!a[u][v]){
-                in[u]++;
-                in[v]++;
-                a[u][v] = a[v][u] = 1;
-                link[u].push_back(v);
-                link[v].push_back(u);
-            }
-        }
-        if (n % 2){
-            printf("NO\n");
-            continue;
-        }
-        deleteOne();
-        bool ok = true;
-        FE(i,1,n) if(!vis[i]){
-            total = 0;
-            visit(i);
-            if (total % 2 == 1){
-                ok = false;
-                printf("NO\n");
-                break;
-            }
-        }
-        if (ok) printf("YES\n");
-    }
+    printf("%.60f\n", 1.0/911) ;
+    printf("%.60lf\n", (double)1.0/911) ;
     return EXIT_SUCCESS;
 }
 

@@ -1,0 +1,51 @@
+<html><body bgcolor="#000000" text="#ffffff"><table><tr><td colspan="2"><h3>Problem Statement</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><i>In this problem, some test cases have more than one correct output. We are using a special checker to verify that the output of your program is correct.</i>
+<br></br><br></br>
+In a far away land, there are 50 programmers who work together in an office.
+As it is usual among programmers, they are numbered 0 through 49.
+<br></br><br></br>
+Mr. Ivan is the town's celebrity.
+The programmers like Mr. Ivan very much, so they invited him to the office.
+Flattered, Ivan decided to visit the office each day for the next N days.
+(We will number those days 0 through N-1, in order.)
+<br></br><br></br>
+Each day, Ivan brought two new toys with him to the office: one dolphin toy and one pie toy.
+And each day, the programmers held a meeting in which two programmers were selected as the most productive ones that day.
+One of them received a dolphin from Ivan, and the other one received a pie.
+(Ivan made the choice who gets which toy.)
+<br></br><br></br>
+Today was the day of Ivan's last visit to the office.
+After he handed over the last dolphin and the last pie, the programmers invited him to a farewell dinner.
+During the dinner, each programmer calculated the absolute difference between the number of dolphins and the number of pies he or she received.
+Then, they computed the sum of those differences.
+Amazingly, it turned out to be the case that the sum of all those differences was the smallest sum possible (given the particular set of choices of pairs of programmers on each day).
+The programmers were very amazed by Ivan's skill, but when they asked him about this, he modestly claimed that he just got lucky.
+<br></br><br></br>
+You are given two vector &lt;int&gt;s <b>choice1</b> and <b>choice2</b>, each with N elements.
+For each i, the programmers who received toys on day i were the programmers <b>choice1</b>[i] and <b>choice2</b>[i].
+<br></br><br></br>
+Find one way how to distribute the toys in such a way that the sum defined above is minimized.
+Return a vector &lt;int&gt; with N elements.
+For each i, element i of the returned vector &lt;int&gt; should be either 1 or 2.
+The value 1 means that on day i the programmer <b>choice1</b>[i] should get the dolphin and the programmer <b>choice2</b>[i] should get the pie.
+The value 2 is the opposite assignment of toys.
+<br></br><br></br>
+If there are multiple optimal distributions, you may return any of them.</td></tr><tr><td colspan="2"><h3>Definition</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Class:</td><td>PieOrDolphin</td></tr><tr><td>Method:</td><td>Distribute</td></tr><tr><td>Parameters:</td><td>vector &lt;int&gt;, vector &lt;int&gt;</td></tr><tr><td>Returns:</td><td>vector &lt;int&gt;</td></tr><tr><td>Method signature:</td><td>vector &lt;int&gt; Distribute(vector &lt;int&gt; choice1, vector &lt;int&gt; choice2)</td></tr><tr><td colspan="2">(be sure your method is public)</td></tr></table></td></tr><tr><td colspan="2"><h3>Limits</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Time limit (s):</td><td>2.000</td></tr><tr><td>Memory limit (MB):</td><td>256</td></tr></table></td></tr><tr><td colspan="2"><h3>Constraints</h3></td></tr><tr><td align="center" valign="top">-</td><td><b>choice1</b> will contain between 1 and 1000 elements, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td>Each element in <b>choice1</b> will be between 0 and 49, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>choice2</b> will contain the same number of elements as <b>choice1</b>.</td></tr><tr><td align="center" valign="top">-</td><td>Each element in <b>choice2</b> will be between 0 and 49, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td>For each i, <b>choice1</b>[i] will not be equal to <b>choice2</b>[i].</td></tr><tr><td colspan="2"><h3>Examples</h3></td></tr><tr><td align="center" nowrap="true">0)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{10, 20, 10}</pre></td></tr><tr><td><pre>{20, 30, 20}</pre></td></tr></table></td></tr><tr><td><pre>Returns: {2, 2, 1 }</pre></td></tr><tr><td><table><tr><td colspan="2">According to the return value shown in the example, the toys were distributed as follows:
+<ul>
+<li>Day 0: programmer 10 gets a pie, programmer 20 gets a dolphin.</li>
+<li>Day 1: programmer 20 gets a pie, programmer 30 gets a dolphin.</li>
+<li>Day 2: programmer 10 gets a dolphin, programmer 20 gets a pie.</li>
+</ul>
+Here is what the programmers compute during the farewell dinner:
+<ul>
+<li>Programmer 10 got 1 dolphin and 1 pie. The absolute difference is |1-1| = 0.</li>
+<li>Programmer 20 got 1 dolphin and 2 pies. The absolute difference is |1-2| = 1.</li>
+<li>Programmer 30 got just 1 dolphin. The absolute difference is |1-0| = 1.</li>
+<li>Each of the other 47 programmers did not receive anything, so they compute |0-0| = 0.</li>
+</ul>
+At the end of the dinner, they sum all those results and obtain the sum 2. This is the smallest possible sum for the given input, hence the return value is correct.</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">1)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{0, 0}</pre></td></tr><tr><td><pre>{1, 1}</pre></td></tr></table></td></tr><tr><td><pre>Returns: {2, 1 }</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">2)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{0, 1, 2, 3, 5, 6, 7, 8}</pre></td></tr><tr><td><pre>{8, 7, 6, 5, 3, 2, 1, 0}</pre></td></tr></table></td></tr><tr><td><pre>Returns: {2, 2, 2, 2, 2, 2, 2, 2 }</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">3)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{49, 0, 48, 1}</pre></td></tr><tr><td><pre>{3, 4, 5, 6}</pre></td></tr></table></td></tr><tr><td><pre>Returns: {2, 2, 2, 2 }</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">4)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>{21,4,14,0,31,46,1,34,2,3,27,19,47,46,17,11,41,12,31,0,34,18,8,14,23,40,0,18,48,35,42,24,25,32,25,44,17,6,44,34,12,39,43,39,26,
+34,10,6,13,2,40,15,16,32,32,29,1,23,8,10,49,22,10,15,40,20,0,30,1,43,33,42,28,39,28,4,38,11,5,1,47,12,0,22,20,33,33,34,18,8,23,6}</pre></td></tr><tr><td><pre>{25,5,39,20,44,47,11,49,42,17,25,15,23,11,32,17,24,4,11,47,27,41,40,0,49,27,5,28,6,11,18,0,17,1,0,32,45,28,17,5,13,40,40,25,33,
+7,8,32,12,0,39,30,8,39,23,9,8,34,34,37,5,1,24,23,0,29,11,42,29,40,24,18,37,1,21,0,31,47,23,33,45,48,31,11,40,45,24,22,19,26,37,39}</pre></td></tr></table></td></tr><tr><td><pre>Returns: 
+{2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2,
+ 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 2,
+ 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 2, 1, 2, 2,
+ 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2, 1, 1, 2, 2, 2, 1 }</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr></table><p>This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2003, TopCoder, Inc.  All rights reserved.  </p></body></html>

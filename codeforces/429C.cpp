@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -26,10 +26,10 @@ using namespace std;
 #define LINR(i,l,r) (l<=i&&i<=r)
 #define LIN(i,l,r) (l<=i&&i<r)
 #define INR(i,l,r) (l<i&&i<r)
-#define F(i,L,R) for (int i = (L); i < (R); i++)
-#define FE(i,L,R) for (int i = (L); i <= (R); i++)
-#define FF(i,L,R) for (int i = (L); i > (R); i--)
-#define FFE(i,L,R) for (int i = (L); i >= (R); i--)
+#define F(i,L,R) for (int i = L; i < R; i++)
+#define FE(i,L,R) for (int i = L; i <= R; i++)
+#define FF(i,L,R) for (int i = L; i > R; i--)
+#define FFE(i,L,R) for (int i = L; i >= R; i--)
 #define char2Int(c) (c-'0')
 #define lastEle(vec) vec[vec.size()-1]
 #define hBit(msb,n) asm("bsrl %1,%0" : "=r"(msb) : "r"(n))
@@ -56,6 +56,7 @@ using namespace std;
 #define ll long long
 #define fi first
 #define se second
+#define root(x) ((int)sqrt((double)x))
 #define wez(n) int (n); scanf("%d",&(n));
 #define wez2(n,m) int (n),(m); scanf("%d %d",&(n),&(m));
 #define wez3(n,m,k) int (n),(m),(k); scanf("%d %d %d",&(n),&(m),&(k));
@@ -73,7 +74,7 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
-#define tiny ((double) 1e-30)
+#define tiny (double)1e-13
 #define close(x,y) (abs(x-y)<tiny)
 typedef int elem_t;
 typedef vector<int> vi; 
@@ -81,78 +82,65 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-vector<char> divd;
-map<vector<char>, double> r_pro;
-double calc3(int total, bool win){
-    if (total == 0){
-        if (win) return 0;
-        else return 1;
+int gcd(int a,int b){return a?gcd(b%a,a):b;}
+ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
+ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
+const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+int n;
+int a[24];
+
+struct node{
+    char left, joined;
+    node(int l, int j):left(l), joined(j){
     }
-    auto i = r_pro.find(divd);
-    if (i != r_pro.end()){
-        if (win) return i->second;
-        else return 1 - i->second;
+    bool operator<(const node& other)const{
+        if (left == other.left) return joined < joined;
+        else return left < other.left;
     }
-    char mac = divd[8];
-    double pro = 0;
-    F(i,0,8)if (divd[i] > 0){
-        double portion = (double)1.0 * divd[i];
-        if (mac & i){
-            divd[i]--;
-            divd[8] = mac & i;
-            pro += portion * calc3(total-1, !win);
-            divd[8] = mac;
-            divd[i]++;
-        }else{
-            if (!win) pro += portion;
+};
+set<vector<node> > has;
+
+bool check(vector<node>& tree){
+    F(i,0,tree.size()) if (tree[i].left != 1 || tree[i].joined == 1) return false;
+    return true;
+}
+
+bool ok(int num, vector<node>& tree){
+    if (num == -1) {
+        return check(tree);
+    }
+    int size = tree.size();
+    F(i,0,size){
+        if (a[num] < tree[i].left){
+            tree[i].left -= a[num];
+            tree[i].joined++;
+            tree.push_back(node(a[num], 0));
+
+            if (has.find(tree) == has.end()){
+                if (ok(num-1, tree))
+                    return true;
+            }
+
+            tree.pop_back();
+            tree[i].joined--;
+            tree[i].left += a[num];
         }
     }
-    pro /= total;
-    if (win) r_pro[divd] = pro;
-    else r_pro[divd] = 1-pro;
-    return pro;
+    has.insert(tree);
+    return false;
 }
 int main ( int argc, char *argv[] ) {
-    int primeA[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
-    int A[101];
-    vector<int> primeV(primeA, primeA+sizeof(primeA)/4);
-/*     printf("%.6lf\n", tiny);
- *     return 0;
- */
-
-    whileZ{
-        wez(n);
-        F(i,0,n) getI(A[i]);
-        double win = 0;
-        bool sureWin = false;
-        F(cho,0,n){
-            if (A[cho] == 1) continue;
-            vector<int> primeFac;
-            vector<int> fac;
-            F(i,0,primeV.size())if (A[cho] % primeV[i] == 0){
-                primeFac.push_back(primeV[i]);
-            }
-            F(i, 0, 1 << (primeFac.size())){
-                int f = 1;
-                F(b,0,primeFac.size()) if (bit(i,b)){
-                    f *= primeFac[b];
-                }
-                fac.push_back(f);
-            }
-            divd = vector<char>(9,0);
-            F(t,0,n) if (t != cho){
-                FFE(i,fac.size()-1,0)
-                    if (A[t] % fac[i] == 0){ 
-                        divd[i]++;
-                        break;
-                    }
-            }
-            divd[8] = fac.size()-1;
-            double oppoLose = calc3(n-1, false);
-            if (close(oppoLose, 1.0)) sureWin = true;
-            win += oppoLose;
-        } 
-        printf("%d %.4lf\n", sureWin, win/n);
+    cin >> n;
+    F(i,0,n) cin >> a[i];
+    sort(a, a+n);
+    if (a[n-1] == n){
+        vector<node> tree;
+        tree.push_back(node(n,0));
+        if (ok(n-2, tree)){
+            cout << "YES" << endl;
+            return 0;
+        }
     }
+    cout << "NO" << endl;
     return EXIT_SUCCESS;
 }

@@ -1,77 +1,88 @@
 // PROBLEM STATEMENT
-// A directed acyclic graph is a family graph if the following constraints are all satisfied:
+// 
+Shiny likes to play games.
+Her favorite games are games with pebbles (small stones).
+Today, she is playing such a game with her friend Lucy.
 
-The nodes of the graph are numbered 0 through N-1, for some positive N.
-Each node is either male or female.
-Each node either has no parents, or it has precisely two parents. (A parent of the node x is a node y such that there is an edge from y to x.)
-If a node has parents, their numbers are strictly smaller than the number of the node.
-If a node has parents, one of them must be male and the other female.
+Initially, there are N piles of stones.
+You are given a vector <int> number with N elements.
+Each element of number is the number of stones in one of the piles.
+
+The players take alternating turns.
+Shiny plays first.
+In each turn, the current player must:
+
+Choose a pile X that has at least two stones.
+Split the chosen pile X into two non-empty parts A and B. (The parts can have arbitrary sizes, as long as both are non-empty.)
+Choose two piles Y and Z. (Y and Z must be different non-empty piles other than X.)
+Add all stones from A to the pile Y, and all stones from B to the pile Z.
 
 
-You are given two vector <int>s parent1 and parent2 with N elements each.
-These describe one directed graph that resembles a family graph:
-For each i, node i has either two parents (in which case parent1[i] and parent2[i] are their numbers, and both of them are smaller than i), or it has no parents (in which case parent1[i] and parent2[i] are both -1).
+For example, if the current piles are {1, 2, 50}, the current player could:
 
-Return "Possible" (quotes for clarity) if the given graph can be a family graph, and "Impossible" otherwise.
+Choose the pile with 50 stones as X.
+Split it into two parts with 25 stones each.
+Choose the other two piles (the ones with 1 and 2 stones) to be Y and Z.
+Add all stones from A to the pile Y, and all stones from B to the pile Z. At the end of the turn, there are two piles of stones: one with 26 and one with 27 stones.
+
+
+The player who cannot make a valid move loses the game.
+Assume that both players play the game optimally.
+Return the string "WIN" (quotes for clarity) if Shiny wins the game, and "LOSE" if she does not.
+
 
 DEFINITION
-Class:Family
-Method:isFamily
-Parameters:vector <int>, vector <int>
+Class:SplitStoneGame
+Method:winOrLose
+Parameters:vector <int>
 Returns:string
-Method signature:string isFamily(vector <int> parent1, vector <int> parent2)
+Method signature:string winOrLose(vector <int> number)
 
 
 CONSTRAINTS
--parent1 will contain between 1 and 100 elements, inclusive.
--parent1 and parent2 will contain the same number of elements.
--For each i, the i-th element (0-based) of parent1 will be between -1 and i-1, inclusive.
--For each i, the i-th element (0-based) of parent2 will be between -1 and i-1, inclusive.
--For each i, the i-th element of parent1 will be -1 if and only if the i-th element of parent2 is -1.
--For each i, if the i-th element of parent1 is not -1, then the i-th element of parent1 and the i-th element of parent2 will be different.
+-number will contain between 1 and 50 elements, inclusive.
+-Each element of number will be between 1 and 50, inclusive.
 
 
 EXAMPLES
 
 0)
-{-1,-1,0}
-{-1,-1,1}
+{1, 1, 1}
 
-Returns: "Possible"
+Returns: "LOSE"
 
-The parents of node 2 are nodes 0 and 1. Nodes 0 and 1 have no parents.
+Shiny can't choose a pile X that has at least two stones, so she loses.
 
 1)
-{-1,-1,-1,-1,-1}
-{-1,-1,-1,-1,-1}
+{2, 2}
 
-Returns: "Possible"
+Returns: "LOSE"
 
-Nobody has any parents.
+After Shiny chooses one of the piles as X and splits it into two piles with one stone each, she is
+unable to choose Y and Z, because there is only one pile left to choose from at the moment. Thus,
+she cannot make a valid move and therefore she loses the game.
 
 2)
-{-1,-1,0,0,1}
-{-1,-1,1,2,2}
+{1, 1, 2}
 
-Returns: "Impossible"
+Returns: "WIN"
 
-Given that 0 and 1 have a child, their genders must be different. Given that 0 and 2 have a child, their genders must be different, too. Then, 1 and 2 must have the same gender, hence they cannot have a child together. Therefore, this cannot be a valid family graph.
+Shiny can choose the last pile as X, split it into 1+1 stone, and add those stones to the other two
+piles. This is a valid move that produces two piles with two stones each, and it is now Lucy's turn. 
+As we saw in Example 1, Lucy now has no valid move left, thus she loses the game and Shiny is the
+winner.
 
 3)
-{-1,-1,-1,-1,1,-1,0,5,6,-1,0,3,8,6}
+{1, 2, 3, 4, 3, 2, 2, 4, 3, 1, 4, 4, 1, 2, 4, 4, 1, 4, 3, 1, 4, 2, 1}
 
-{-1,-1,-1,-1,3,-1,4,6,5,-1,5,4,6,1}
-
-
-Returns: "Possible"
+Returns: "WIN"
 
 
 
 4)
-{-1,-1,-1,2,2,-1,5,6,4,6,2,1,8,0,2,4,6,9,-1,16,-1,11}
-{-1,-1,-1,1,0,-1,1,4,2,0,4,8,2,3,0,5,14,14,-1,7,-1,13}
+{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 3, 1, 9, 1, 3, 1, 1, 1, 1, 1}
 
-Returns: "Impossible"
+Returns: "LOSE"
 
 
 
@@ -179,10 +190,10 @@ ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
 const int maxint = -1u>>2 ;
 const double eps = 1e-6 ; 
-class Family
+class SplitStoneGame
 {
     public:
-        string isFamily(vector <int> parent1, vector <int> parent2)
+        string winOrLose(vector <int> number)
         {
 
 
@@ -196,20 +207,18 @@ class Family
 	private:
 	template <typename T> string print_array(const vector<T> &V) { ostringstream os; os << "{ "; for (typename vector<T>::const_iterator iter = V.begin(); iter != V.end(); ++iter) os << '\"' << *iter << "\","; os << " }"; return os.str(); }
 	void verify_case(int Case, const string &Expected, const string &Received) { cerr << "Test Case #" << Case << "..."; if (Expected == Received) cerr << "PASSED" << endl; else { cerr << "FAILED" << endl; cerr << "\tExpected: \"" << Expected << '\"' << endl; cerr << "\tReceived: \"" << Received << '\"' << endl; } }
-	void test_case_0() { int Arr0[] = {-1,-1,0}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); int Arr1[] = {-1,-1,1}; vector <int> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); string Arg2 = "Possible"; verify_case(0, Arg2, isFamily(Arg0, Arg1)); }
-	void test_case_1() { int Arr0[] = {-1,-1,-1,-1,-1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); int Arr1[] = {-1,-1,-1,-1,-1}; vector <int> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); string Arg2 = "Possible"; verify_case(1, Arg2, isFamily(Arg0, Arg1)); }
-	void test_case_2() { int Arr0[] = {-1,-1,0,0,1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); int Arr1[] = {-1,-1,1,2,2}; vector <int> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); string Arg2 = "Impossible"; verify_case(2, Arg2, isFamily(Arg0, Arg1)); }
-	void test_case_3() { int Arr0[] = {-1,-1,-1,-1,1,-1,0,5,6,-1,0,3,8,6}
-; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); int Arr1[] = {-1,-1,-1,-1,3,-1,4,6,5,-1,5,4,6,1}
-; vector <int> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); string Arg2 = "Possible"; verify_case(3, Arg2, isFamily(Arg0, Arg1)); }
-	void test_case_4() { int Arr0[] = {-1,-1,-1,2,2,-1,5,6,4,6,2,1,8,0,2,4,6,9,-1,16,-1,11}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); int Arr1[] = {-1,-1,-1,1,0,-1,1,4,2,0,4,8,2,3,0,5,14,14,-1,7,-1,13}; vector <int> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); string Arg2 = "Impossible"; verify_case(4, Arg2, isFamily(Arg0, Arg1)); }
+	void test_case_0() { int Arr0[] = {1, 1, 1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arg1 = "LOSE"; verify_case(0, Arg1, winOrLose(Arg0)); }
+	void test_case_1() { int Arr0[] = {2, 2}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arg1 = "LOSE"; verify_case(1, Arg1, winOrLose(Arg0)); }
+	void test_case_2() { int Arr0[] = {1, 1, 2}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arg1 = "WIN"; verify_case(2, Arg1, winOrLose(Arg0)); }
+	void test_case_3() { int Arr0[] = {1, 2, 3, 4, 3, 2, 2, 4, 3, 1, 4, 4, 1, 2, 4, 4, 1, 4, 3, 1, 4, 2, 1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arg1 = "WIN"; verify_case(3, Arg1, winOrLose(Arg0)); }
+	void test_case_4() { int Arr0[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 3, 1, 9, 1, 3, 1, 1, 1, 1, 1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arg1 = "LOSE"; verify_case(4, Arg1, winOrLose(Arg0)); }
 
 // END CUT HERE
 
 };
 // BEGIN CUT HERE
 int main(){
-    Family ___test;
+    SplitStoneGame ___test;
     ___test.run_test(-1);
     return 0;
 }

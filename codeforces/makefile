@@ -1,4 +1,4 @@
-target= 427D
+target= 429C
 
 all:
 	g++ -o $(target) -g $(target).cpp -w
