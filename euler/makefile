@@ -1,30 +1,39 @@
-CFLAGS=-g
+vpath %.cc .
 CC=g++
-DEP=euler.h
-OBJ=21
-all:$(OBJ)
-bigint-dir=BigFeng
-bigint-objects =BigIntBase.o
-bigint-lib=$(patsubst %,$(bigint-dir)/%,$(bigint-objects))
+CFLAGS=-g
 
-temp:temp.cc euler.o
+_TAR = testBigIntBase euler
+_OBJ = $(patsubst %,%.o,$(_TAR)) BigIntBase.o
 
-17:17.cc numberSpell.o
-	$(CC) $(CFLAGS) -o $@ $^
+TAR = $(patsubst %,obj/%,$(_TAR))
+OBJ = $(patsubst %,obj/%,$(_OBJ))
 
-19:19.o euler.o
-21:21.o euler.o
-	$(CC) $(CFLAGS) -o $@ $^
+.PHONY: all clean print test debug
 
-16:16.o euler.o $(bigint-lib)
+all: $(TAR)
 
-20:20.o $(bigint-lib)
+print: 
+	echo $(OBJ)
 
-$(bigint-lib):
+debug:
+	./obj/testBigIntBase
+test:
+	./obj/testBigIntBase 2>error
 
-%.o:%.cc
-	$(CC) $(CFLAGS) -c $< 
+$(TAR):$(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
+	
+$(OBJ): | obj
+obj:
+	@mkdir -p $@
 
+obj/%.o : %.cc %.h
+	@echo $<
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+
+
+
+.PHONY : clean
 clean:
-	rm $(OBJ) *.o
-#find -executable  -maxdepth 1 ! -iname "*.sh -exec rm {} \;
+	rm -rf *.o obj/ testBigIntBase test BigIntBase

@@ -1,7 +1,2 @@
 #!/bin/bash
-if [ ${1} = ""]; then
-    file=12
-else
-    file=${1}
-fi
-gvim -p $file.cc euler.cc euler.h  makefile
+vim -p BigIntBase.cc BigIntBase.h testBigIntBase.cc  makefile README.md
