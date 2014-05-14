@@ -1,28 +1,132 @@
+// PROBLEM STATEMENT
+// 
+There is an n by n matrix of positive integers.
+You are given its elements in a vector <int> x with n*n elements.
+For each i and j (0-based indices), the number in row i, column j of the matrix is x[i*n+j].
+
+
+
+You want to select some elements of the matrix.
+Your selection must satisfy the following constraints:
+
+Each row must contain an odd number of selected elements.
+Each column must contain an odd number of selected elements.
+The product of all selected elements must be a perfect square.
+
+
+
+
+Return the number of valid ways to select such subset of elements, modulo 1,000,000,007.
+
+
+
+DEFINITION
+Class:PerfectSquare
+Method:ways
+Parameters:vector <int>
+Returns:int
+Method signature:int ways(vector <int> x)
+
+
+CONSTRAINTS
+-n will be between 1 and 20, inclusive.
+-x will contain exactly n*n elements.
+-Each element in x will be between 1 and 1,000,000,000, inclusive.
+
+
+EXAMPLES
+
+0)
+{1, 1,
+ 1, 2}
+
+
+Returns: 1
+
+The only valid solution is to select the elements in the cells (0,1) and (1,0). Their product is 1 = 1^2.
+
+1)
+{620, 620,
+ 620, 620}
+
+
+Returns: 2
+
+Two solutions: {(0,0), (1,1)}, {(0,1), (1,0)}.
+
+2)
+{1, 2, 3,
+ 4, 5, 6,
+ 7, 8, 9}
+
+Returns: 1
+
+The only valid solution is to select the elements with values 1, 2, 3, 6, and 9. Their product is 1*2*3*6*9 = 324 = 18^2.
+
+3)
+{2, 2, 2, 2, 2,
+ 2, 2, 2, 2, 2,
+ 2, 2, 2, 2, 2,
+ 2, 2, 2, 2, 2,
+ 2, 2, 2, 2, 2}
+
+Returns: 0
+
+In this test case the total number of selected elements will always be odd. Thus, the product of all selected elements will always be equal to 2^(2k+1) for some k. A number of the form 2^(2k+1) can never be a perfect square.
+
+4)
+{2, 3, 4, 5,
+ 6, 7, 8, 9,
+ 10,11,12,13,
+ 14,15,16,17}
+
+Returns: 4
+
+
+
+5)
+{9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,
+ 9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690,9699690}
+
+Returns: 993282280
+
+
+
 #include <sstream>
-#include <cmath>
-#include <set>
-#include <list>
-#include <unordered_set>
-#include <hash_map>
-#include <climits>
-#include <queue>
-#include <vector>
-#include <map>
-#include <set>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>   
-#include <iostream>  
-#include <sstream>  // istringstream buffer(myString);
-#include <stack>
-#include <algorithm>
+/*
+*/
+#define debuging
+#ifdef debuging
+#define FIN  {freopen("new.in" , "r" , stdin) ;}
+#define FOUT {freopen("new.out" , "w" , stdout) ;}
+#define OUT(x)  {cout<< #x << "  : " << x <<endl ;}
+#define ERR(x)  {cout<<"#error: "<< x ; while(1) ;}
+#endif
+// END CUT HERE
+#ifndef debuging
+#define FIN  ;
+#define FOUT ;
+#define OUT(x)  ;
+#define ERR(x)  ;
+#endif
+#include <cstdio>
+#include <iostream>
 #include <cstring>
-#include <cassert>
-using namespace std;
+#include <algorithm>
+#include <cmath>
+#include <vector>
+using namespace std ;
 #define bit(x,i) (x&(1<<i))
-#define lowbit(x) ((x)&((x)^((x)-1)))
-//#define max(a,b) (a<b?b:a)
-//#define abs(x) (x<0?-x:x)
+#define max(a,b) (a<b?b:a)
+#define abs(x) (x<0?-x:x)
 #define IN(i,l,r) (l<i&&i<r)
 #define LINR(i,l,r) (l<=i&&i<=r)
 #define LIN(i,l,r) (l<=i&&i<r)
