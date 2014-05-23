@@ -1,0 +1,49 @@
+<html><body bgcolor="#000000" text="#ffffff"><table><tr><td colspan="2"><h3>Problem Statement</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td>There is a narrow passage of length <b>L</b>.
+We will use a coordinate system where 0 and <b>L</b> are the ends of the passage.
+<br></br>
+<br></br>
+Inside the passage there are some wolves.
+You are given two vector &lt;int&gt;s <b>a</b> and <b>b</b> with the same number of elements.
+The elements of <b>a</b> are the current coordinates of all wolves.
+For each wolf, the corresponding element of <b>b</b> is the coordinate where the wolf wants to go.
+That is, for each valid i, wolf i wants to move from <b>a</b>[i] to <b>b</b>[i].
+<br></br>
+<br></br>
+The passage is so narrow that wolves cannot pass by each other.
+In other words, the relative order of the wolves cannot change while they are in the passage.
+Luckily, there is a lot of empty space on each end of the passage.
+If some wolves reach the same end of the passage, they can change their order arbitrarily before reentering the passage.
+<br></br>
+<br></br>
+All wolves must finish at their desired coordinates.
+Return the minimum total distance the wolves have to travel within the passage in order to reach their final configuration.
+Note that the distance traveled while they are reordering at the ends of the passage does not count.</td></tr><tr><td colspan="2"><h3>Definition</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Class:</td><td>NarrowPassage</td></tr><tr><td>Method:</td><td>minDist</td></tr><tr><td>Parameters:</td><td>int, vector &lt;int&gt;, vector &lt;int&gt;</td></tr><tr><td>Returns:</td><td>int</td></tr><tr><td>Method signature:</td><td>int minDist(int L, vector &lt;int&gt; a, vector &lt;int&gt; b)</td></tr><tr><td colspan="2">(be sure your method is public)</td></tr></table></td></tr><tr><td colspan="2"><h3>Limits</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Time limit (s):</td><td>2.000</td></tr><tr><td>Memory limit (MB):</td><td>256</td></tr></table></td></tr><tr><td colspan="2"><h3>Constraints</h3></td></tr><tr><td align="center" valign="top">-</td><td><b>L</b> will be between 2 and 1,000,000, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>a</b> and <b>b</b> will each contain between 1 and 50 elements, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>a</b> and <b>b</b> will contain the same number of elements.</td></tr><tr><td align="center" valign="top">-</td><td>Each element of <b>a</b> and <b>b</b> will be between 1 and <b>L</b>-1, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td>Elements in <b>a</b> will be pairwise distinct.</td></tr><tr><td align="center" valign="top">-</td><td>Elements in <b>b</b> will be pairwise distinct.</td></tr><tr><td colspan="2"><h3>Examples</h3></td></tr><tr><td align="center" nowrap="true">0)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>5</pre></td></tr><tr><td><pre>{1, 2}</pre></td></tr><tr><td><pre>{3, 4}</pre></td></tr></table></td></tr><tr><td><pre>Returns: 4</pre></td></tr><tr><td><table><tr><td colspan="2">We have two wolves.
+One of them wants to go from 1 to 3, the other one from 2 to 4.
+They can do this without passing each other.
+(For example, they can both move simultaneously. 
+Alternately, wolf 1 can move before wolf 0 does.
+There are no restrictions on the movement of wolves other than they cannot pass each other within the passage.)
+The total distance traveled in this case is |1-3| + |2-4| = 4.</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">1)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>10</pre></td></tr><tr><td><pre>{3, 9}</pre></td></tr><tr><td><pre>{8, 6}</pre></td></tr></table></td></tr><tr><td><pre>Returns: 14</pre></td></tr><tr><td><table><tr><td colspan="2">One of the optimal ways looks as follows:
+<ol>
+<li>Wolf 1 moves from 9 to 10.</li>
+<li>Wolf 0 moves from 3 to 10.</li>
+<li>Wolf 1 moves from 10 to 6.</li>
+<li>Wolf 0 moves from 10 to 8.</li>
+</ol>
+</td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">2)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>265467</pre></td></tr><tr><td><pre>{133548, 103861, 29821, 199848, 92684, 219824, 215859, 62821, 172409, 109235,
+38563, 148854, 24742, 174068, 205005, 75922, 87316, 5542, 57484, 40792,
+25229, 152216, 21547, 22203, 84712, 231522, 235703, 184895, 100787, 174440,
+156904, 84898, 185568, 108732, 260098, 89488, 221604, 104555, 165775, 90444,
+81952, 149671, 209674, 22185, 45420, 41928, 16098, 65324, 90870, 35243}</pre></td></tr><tr><td><pre>{150289, 135139, 69841, 227226, 177427, 230314, 199175, 81572, 220468, 151049,
+40009, 145963, 115246, 252932, 263651, 38434, 120096, 69576, 29789, 115046,
+33310, 260771, 5723, 80733, 107864, 142447, 235490, 242149, 124564, 134602,
+245962, 7078, 215816, 219864, 190499, 210237, 212894, 142760, 126472, 201935,
+119308, 120211, 235235, 19446, 87314, 17286, 61990, 102050, 261812, 257}</pre></td></tr></table></td></tr><tr><td><pre>Returns: 7148670</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">3)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>1000000</pre></td></tr><tr><td><pre>{706292, 756214, 490048, 228791, 567805, 353900, 640393, 562496, 217533, 934149,
+938644, 127480, 777134, 999144, 41485, 544051, 417987, 767415, 971662, 959022,
+670563, 34065, 518183, 750574, 546576, 207758, 159932, 429345, 670513, 271901,
+476062, 392721, 774733, 502586, 915436, 120280, 951729, 699859, 581770, 268966,
+79392, 888601, 378829, 350198, 939459, 644983, 605862, 721305, 269232, 137587}</pre></td></tr><tr><td><pre>{322468, 673534, 83223, 551733, 341310, 485064, 885415, 927526, 159402, 28144,
+441619, 305530, 883149, 413745, 932694, 214862, 677401, 104356, 836580, 300580,
+409942, 748444, 744205, 119051, 999286, 462508, 984346, 887773, 856655, 245559,
+418763, 840266, 999775, 962927, 779570, 488394, 760591, 326325, 206948, 13999,
+285467, 401562, 786209, 169847, 171326, 2901, 296531, 572035, 364920, 939046}</pre></td></tr></table></td></tr><tr><td><pre>Returns: 45670501</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr></table><p>This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2003, TopCoder, Inc.  All rights reserved.  </p></body></html>

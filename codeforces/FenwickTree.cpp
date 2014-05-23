@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -19,7 +19,7 @@
 #include <cassert>
 using namespace std;
 #define bit(x,i) (x&(1<<i))
-#define lowbit(x) ((x)&((x)^((x)-1)))
+#define lowb(t) (t &(-t))
 #define pow2(x) (1<<x)
 //#define max(a,b) (a<b?b:a)
 //#define abs(x) (x<0?-x:x)
@@ -74,6 +74,7 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 typedef int elem_t;
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
@@ -84,22 +85,34 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+const int fxx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+
+template <class typev>
+class FenwickTree{
+private:
+    int n;
+    vector<typev> val;
+public:
+    FenwickTree(int _n):n(_n){
+        val = vector<typev>(n+1, 0);
+    }
+    void add(int i, int v){
+        for (; i < n; val[i] += v, i += lowb(i));
+    }
+    typev query(int i){
+        typev s = 0;
+        for (; i > 0; s += val[i], i -= lowb(i));
+        return s;
+    }
+};
+
+
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    FenwickTree<int> f(10);
+    f.add(1,1);
+    f.add(2,3);
+    cout << f.query(1) << endl;
     return EXIT_SUCCESS;
 }
+

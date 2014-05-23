@@ -1,4 +1,4 @@
-target= manyPrices
+target= baidustar1-3
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated

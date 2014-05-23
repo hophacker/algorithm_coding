@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -83,23 +83,56 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+int a[1001];
+int f[2][360], F[2][360];
+int n, t, ans;
+
+inline int move(int x, int y){
+    if (x > y) swap(x,y);
+    return min(y-x, 360+x-y);
+}
+inline void update(int& left, int x){
+    if (left == -1 || x < left){
+        left = x;
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
+}
+int main ( int argc, char *argv[] ) {
     whileZ{
+        getI(n);
+        a[0] = 0;
+        FE(i,1,n) getII(t, a[i]);
+        ans = 400 * t * 2 + n * 10;
+
+        clr(f, -1);
+        f[0][0] = f[1][0] = 0;
+
+        FE(t,1,n){
+            clr(F, -1);
+            F(i,0,360){
+                if (f[0][i] != -1){
+                    update(F[0][i], f[0][i] + move(a[t], a[t-1]));
+                    update(F[1][a[t-1]], f[0][i] + move(a[t], i));
+                }
+                if (f[1][i] != -1){
+                    update(F[1][i], f[1][i] + move(a[t], a[t-1]));
+                    update(F[0][a[t-1]], f[1][i] + move(a[t], i));
+                }
+            }
+            memcpy(f, F, sizeof(f));
+        }
+
+        int minMove = INT_MAX;
+        F(i,0,360){
+            if (f[0][i] != -1){
+                //cout << "     " << 0 << ' ' << i << ' ' << f[0][i] << endl;
+                minMove = min(minMove, f[0][i] + move(i, a[n]));
+            }
+            if (f[1][i] != -1){
+//                cout << "     " << 1 << ' ' << i << ' ' << f[1][i] << endl;
+                minMove = min(minMove, f[1][i] + move(i, a[n]));
+            }
+        }
+        cout << minMove + ans << endl;
     }
     return EXIT_SUCCESS;
 }

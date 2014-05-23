@@ -1,77 +1,119 @@
-#include <cmath>
-#include <vector>
-#include <map>
-//new
-#include <queue>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>   
-#include <iostream>  
 #include <algorithm>
+#include <bitset>
+#include <cctype>
+#include <cfloat>
+#include <climits>
+#include <complex>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
-#include <cassert>
+#include <cmath>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <string>
+#include <unistd.h>
+#include <utility>
+#include <valarray>
+#include <vector>
+
 using namespace std;
-#define bit(x,i) (x&(1<<i))
-#define max(a,b) (a<b?b:a)
-#define abs(x) (x<0?-x:x)
-#define IN(i,l,r) (l<i&&i<r)
-#define LINR(i,l,r) (l<=i&&i<=r)
-#define LIN(i,l,r) (l<=i&&i<r)
-#define INR(i,l,r) (l<i&&i<r)
-#define F(i,L,R) for (int i = L; i < R; i++)
-#define FE(i,L,R) for (int i = L; i <= R; i++)
-#define FF(i,L,R) for (int i = L; i > R; i--)
-#define FFE(i,L,R) for (int i = L; i >= R; i--)
-#define char2Int(c) (c-'0')
-#define lastEle(vec) vec[vec.size()-1]
-#define hBit(msb,n) asm("bsrl %1,%0" : "=r"(msb) : "r"(n))
-#define clr(a,x) memset(a,x,sizeof(a))
-#define getI(a) scanf("%d", &a)
-#define getII(a,b) scanf("%d%d", &a, &b)
-#define getIII(a,b,c) scanf("%d%d%d", &a, &b, &c)
-#define getS(x) scanf("%s", x);
-#define ll long long
-#define ui unsigned int
-#define us unsigned short
-int total = 0;
-vector<int> link[101];
-bool vis[101];
-bool a[101][101];
-int in[101], n, m;
-queue<int> q;
+typedef long long ll;
 
-void visit(int u){
-    vis[u] = 1;
-    total++;
-    F(i,0,link[u].size()){
-        int v = link[u][i];
-        if (!vis[v]) visit(v);
-    }
-}
-void deleteOne(){
-    while(!q.empty()) q.pop();
-    FE(i,1,n) if (in[i] == 1) q.push(i);
+#define gc getchar
+int getint() { unsigned int c; int x = 0; while (((c = gc()) - '0') >= 10) { if (c == '-') return -getint(); if (!~c) exit(0); } do { x = (x << 3) + (x << 1) + (c - '0'); } while (((c = gc()) - '0') < 10); return x; }
+ll getll() { unsigned int c; ll x = 0; while (((c = gc()) - '0') >= 10) { if (c == '-') return -getll(); if (!~c) exit(0); } do { x = (x << 3) + (x << 1) + (c - '0'); } while (((c = gc()) - '0') < 10); return x; }
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 
-    while(!q.empty()){
-        int u = q.front(); q.pop();
-        if (in[u] != 1) continue;
-        int v, w;
-        F(i,0,link[u].size()){
-            v = link[u][i];
-            if (!vis[v]) break;
-        }
-        vis[u] = vis[v] = true;
-        F(i,0,link[v].size()){
-            w = link[v][i];
-            if (!vis[w] && --in[w] == 1)
-                q.push(w);
+int nstr[22], k;
+ll dp[2][2][10][22];
+ll pow10(int k) { if (k < 1) return 1; return 10LL * pow10(k - 1); }
+
+ll solve(int zero, int ob, int want, int depth) {
+    ll & res = dp[zero][ob][want][depth];
+    if (~res) return res;
+    if (depth == k) return res = 0;
+    res = 0;
+    int end = 9;
+    if (ob) end = nstr[depth];
+    for (int d = 0; d <= end; d++) {
+        if (ob and d == nstr[depth]) {
+            if (d == want) {
+                ll t = 0;
+                for (int i = depth + 1; i < k; i++) {
+                    t = 10 * t + nstr[i];
+                }
+                if (d != 0 or zero == 0) res += t + 1;
+            } else {
+                res += solve(0, 1, want, depth + 1);
+            }
+        } else {
+            if (zero and d == 0) {
+                if (d == want and ob) {
+                    res += solve(1, 0, want, depth + 1);
+                } else {
+                    res += solve(1, 0, want, depth + 1);
+                }
+            } else {
+                if (d == want) {
+                    res += pow10(k - depth - 1);
+                } else {
+                    if (d == nstr[depth] and ob) res += solve(0, ob, want, depth + 1);
+                    else res += solve(0, 0, want, depth + 1);
+                }
+            }
         }
     }
-}
-int main ( int argc, char *argv[] ) {
-    printf("%.60f\n", 1.0/911) ;
-    printf("%.60lf\n", (double)1.0/911) ;
-    return EXIT_SUCCESS;
+    return res;
 }
 
 
+void test(int n) {
+    vector<int> cnt(10);
+    for (int i = 1; i <= n; i++) {
+        string s = tos(i);
+        for (int j = 0; j < 10; j++) {
+            int f = 0;
+            for (int k = 0; k < s.size(); k++) {
+                if (s[k] - '0' == j) { f = 1; break; }
+            }
+            if (f) cnt[j]++;
+        }
+    }
+    puts("test");
+    for (int i = 0; i < 10; i++) cout << i << ' ' << cnt[i] << endl;
+}
+
+template<class T> T gcd(T x, T y) { T t; while (y) t = y, y = x % y, x = t; return x; }
+
+#define pch putchar
+void putll(ll n) { int i = 32, a[i]; if (n < 0) pch('-'); do { a[--i] = 48 + abs(n % 10); n /= 10; } while (n); while (i < 32) pch(a[i++]); }
+
+int main () {
+    int i, j, tcc, tc = getint();
+    for (tcc = 0; tcc < tc; tcc++) {
+        ll n = getll();
+        // test(n);
+        ll nums[10] = {};
+        string str = tos(n);
+        k = str.size();
+        for (i = 0; i < str.size(); i++) nstr[i] = str[i] - '0';
+        memset(dp, ~0, sizeof(dp));
+        ll sum = 0;
+        for (i = 0; i < 10; i++) {
+            nums[i] = solve(1, 1, i, 0);
+            // cout << i << ' ' << nums[i] << endl;
+            sum += nums[i];
+            // cout << res[i] << endl;
+        }
+        ll m = 10 * n, gg = gcd(m, sum);
+        putll(sum / gg); putchar('/'); putll(m / gg); puts("");
+    }
+    return 0;
+}

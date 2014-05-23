@@ -1,4 +1,4 @@
-target= RadioRange
+target= Crypt-Kicker
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
@@ -10,7 +10,7 @@ justrun:
 	./${target} 
 
 run:
-	./${target} < in
+	./${target} < in | tee out
 
 debug:
 	gdb ${target}

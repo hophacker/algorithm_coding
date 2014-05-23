@@ -45,8 +45,7 @@ using namespace std;
 #define REMIN(a,b) (a)=min((a),(b));
 #define FOREACH(i,t) for (typeof(t.begin()) i=t.begin(); i!=t.end(); i++)
 #define ALL(t) t.begin(),t.end()
-#define ll long long
-#define ull unsigned long long
+#define ll unsigned long long
 #define ui unsigned int
 #define us unsigned short
 #define IOS ios_base::sync_with_stdio(0);
@@ -54,7 +53,6 @@ using namespace std;
 #define INF 1001001001
 #define PI 3.1415926535897932384626
 #define mp make_pair
-#define ll long long
 #define fi first
 #define se second
 #define wez(n) int (n); scanf("%d",&(n));
@@ -83,23 +81,123 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+
+vector<vector<ll> > generateComb(int n){
+    vector<vector<ll> > comb;
+    comb.push_back(vector<ll>());
+    FE(i,1,n){
+        comb.push_back(vector<ll>());
+        comb[i].push_back(1);
+        FE(j,1,i-1){
+            comb[i].push_back(comb[i-1][j-1] + comb[i-1][j]);
+        }
+        comb[i].push_back(1);
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+    return comb;
+}
+
+
+vector<int> generateDigits(ll n){
+    vector<int> res;
+    if (n == 0) res.push_back(0);
+    while(n){
+        res.push_back(n % 10);
+        n /= 10;
+    }
+    return res;
+}
+int main ( int argc, char *argv[] ) {
+    vector<vector<ll> > comb;
+    comb = generateComb(18);
+    
+
+    vector<ll> mul9;
+    mul9.push_back(1);
+    FE(i,1,17){
+        mul9.push_back(mul9[i-1] * 9);
+    }
+
+//    printV(mul9);
+    vector<ll> select;
+    select.push_back(0);
+    FE(i,1,17){
+        ll sum = 0;
+        FE(j,1,i){
+            sum += comb[i][j] * mul9[i-j];
+        }
+        select.push_back(sum);
+    }
+//    printV(select);
+
+    vector<ll> pow;
+    pow.push_back(1);
+    FE(i,1,17) pow.push_back(pow[i-1] * 10);
+
+
+    wez(T);
+    ll n;
+    FE(cases,1,T){
+        cin >> n;
+        ll cnt = 0;
+        ll p = 1;
+        vector<int> digits = generateDigits(n);
+        F(d,0,10){
+            ll cntPre = cnt;
+            FFE(i,digits.size()-1,0){
+                //110
+                //100
+                if (i == digits.size()-1){
+                    if (d == 0)
+                        FE(j,0,i-1) cnt += 9 * select[j];
+                    else{
+                        FE(j,0,i-1) cnt += 8 * select[j] + pow[j];
+                    }
+                }
+
+//                if (d == 1) cout << cnt-cntPre << endl;
+
+//                if (i == 0 && d <= digits[i]) cnt++;
+
+
+                if (i == digits.size()-1){
+                    if (d == 0) 
+                        cnt += select[i] * (digits[i] - 1);
+                    else if (d < digits[i]){
+                        cnt += select[i] * (digits[i]-2);
+                        cnt += pow[i];
+                    }else if (d == digits[i]){
+                        cnt += select[i] * (digits[i]-1);
+                        cnt += n % pow[i] + 1;
+                        break;
+                    }else{
+                        cnt += select[i] * (digits[i]-1);
+                    }
+
+                }else{
+                    if (d < digits[i]){
+                        cnt += select[i] * (digits[i]-1);
+
+                        cnt += pow[i];
+
+                    }else if (d == digits[i]){
+                        cnt += select[i] * digits[i];
+                        cnt += n % pow[i] + 1;
+                        break;
+                    }else{
+                        cnt += select[i] * digits[i];
+                    }
+                }
+
+//                if (d == 1) cout << cnt-cntPre << endl;
+            }
+//            cout << d << ":    " << cnt-cntPre << endl;
+        }
+        ll g = gcd(n*10, cnt);
+        cout << cnt/g << '/' << n*10/g << endl;
     }
     return EXIT_SUCCESS;
 }
+
+
+
+

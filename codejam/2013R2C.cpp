@@ -85,21 +85,63 @@ ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
     wez(T);
     FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+        printf("Case #%d: ", cases); 
+        cout << endl;
+        wez(n);
+        vector<int> A(n), B(n);
+        vector<set<int> > edges(n);
+        F(i,0,n) cin >> A[i];
+        F(i,0,n) cin >> B[i];
+        int maxI = A[0];
+        vector<int> big;
+        F(i,1,n){
+            int maxJ = 0, maxV = 0;
+            big.resize(0);
+            F(j,0,i){
+                if (A[j] >= A[i]) big.push_back(j);
+                else{
+                    if (A[j] >= maxV){
+                        maxV = A[j];
+                        maxJ = j;
+                    }
+                }
+            }
+            F(k,0,big.size()){
+                edges[i].insert(big[k]);
+            }
+            if (maxV  != 0){
+                edges[maxJ].insert(i);
+            }
+        }
+
+        FFE(i,n-2,0){
+            int maxJ = 0, maxV = 0;
+            big.resize(0);
+            F(j,i+1,n){
+                if (B[j] >= B[i]) big.push_back(j);
+                else{
+                    if (B[j] > maxV){
+                        maxV = B[j];
+                        maxJ = j;
+                    }
+                }
+            }
+            F(k,0,big.size()){
+                edges[i].insert(big[k]);
+            }
+            if (maxV  != 0){
+                edges[maxJ].insert(i);
+            }
+        }
+        F(i,0,n){
+            cout << i << ":";
+            for (auto j = edges[i].begin(); j != edges[i].end(); j++){
+                cout << *j << ' ';
+            }
+            cout << endl;
+        }
     }
     return EXIT_SUCCESS;
 }

@@ -45,8 +45,7 @@ using namespace std;
 #define REMIN(a,b) (a)=min((a),(b));
 #define FOREACH(i,t) for (typeof(t.begin()) i=t.begin(); i!=t.end(); i++)
 #define ALL(t) t.begin(),t.end()
-#define ll long long
-#define ull unsigned long long
+#define ll unsigned long long
 #define ui unsigned int
 #define us unsigned short
 #define IOS ios_base::sync_with_stdio(0);
@@ -54,7 +53,6 @@ using namespace std;
 #define INF 1001001001
 #define PI 3.1415926535897932384626
 #define mp make_pair
-#define ll long long
 #define fi first
 #define se second
 #define wez(n) int (n); scanf("%d",&(n));
@@ -83,23 +81,145 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+
+
+struct node{
+    int d, targetD;
+    ll powK;
+    node(int dd, ll powKK, int targetDD){
+        d = dd;
+        targetD = targetDD;
+        powK = powKK;
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+    bool operator <(const node& other)const{
+        if (powK == other.powK){
+            if (d == other.d) {
+                return targetD < other.targetD;
+            }else return d < other.d;
+        }else return powK < other.powK;
+    }
+};
+
+// d[k 0s] -> d[k 9s]
+// targetD
+// powK = 10**k
+map<node, ll> ha;
+ll calc(int d, ll powK, int targetD){
+    if (powK == 1) return targetD == d;
+    if (powK == 10) {
+        if (targetD  == d) return 10;
+        else return 1;
+    }
+
+    node yes(d,powK,targetD);
+    if (ha.find(yes) == ha.end()){ 
+
+        ll sum = 0;
+        if (d == targetD) sum += powK;
+        else{
+            F(dd,0,10)
+                sum += calc(dd, powK/10, targetD);
+        }
+        ha[yes] = sum;
+
+    }
+    return ha[yes];
+}
+ll getNumDig(ll n, int targetD, ll pow){
+    ll sum = 0;
+
+
+    while(pow >= 1){
+        int hD = n/pow;
+//        cout << n << ' ' << pow << endl;
+        F(i,0,hD){
+            sum += calc(i, pow, targetD);
+        }
+        if (hD == targetD){
+            sum += n % pow + 1;
+            break;
+        }else{
+            n %= pow;
+            pow /= 10;
+        }
+    }
+    return sum;
+}
+ll calc0(ll n, ll p){
+    ll sum = 0;
+
+    ll pow = p;
+
+    while(pow >= 10){
+        sum += 9 * calc(1, pow/10, 0);
+        pow /= 10;
+    }
+    cout << sum << endl;
+
+    sum += calc(0, n%p, 0);
+    return sum;
+}
+vector<vector<ll> > generateComb(int n){
+    vector<vector<ll> > comb;
+    comb.push_back(vector<ll>());
+    FE(i,1,n){
+        comb.push_back(vector<ll>());
+        comb[i].push_back(1);
+        FE(j,1,i-1){
+            comb[i].push_back(comb[i-1][j-1] + comb[i-1][j]);
+        }
+        comb[i].push_back(1);
+    }
+    return comb;
+}
+
+int main ( int argc, char *argv[] ) {
+    vector<vector<ll> > comb;
+    comb = generateComb(18);
+    
+
+    vector<ll> mul9;
+    mul9.push_back(1);
+    FE(i,1,17){
+        mul9.push_back(mul9[i-1] * 9);
+    }
+
+//    printV(mul9);
+
+    vector<ll> select;
+    select.push_back(0);
+
+    FE(i,1,17){
+        ll sum = 0;
+        FE(j,1,i){
+            sum += comb[i][j] * mul9[i-j];
+        }
+        select.push_back(sum);
+    }
+
+//    printV(select);
+
+    wez(T);
+    ll n;
+    FE(cases,1,T){
+        cin >> n;
+
+        ll pow = 1;
+        while(pow <= n) pow *= 10;
+        pow /= 10;
+
+        ll sum = calc0(n, pow);
+        cout << 0  << ' ' << sum << endl;
+        F(i,1,10){
+            ll add = getNumDig(n, i, pow);
+            sum += add;
+            cout << i << ' ' << add << endl;
+        }
+        // 0000
+//        cout << sum << endl;
+        ll total = n * 10;
+        ll g = gcd(sum, total);
+        cout << sum/g << '/' << total/g << endl;
     }
     return EXIT_SUCCESS;
 }

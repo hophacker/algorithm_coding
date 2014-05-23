@@ -83,23 +83,19 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+int a[100010];
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
     wez(T);
     FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+        wez(n);
+        F(i,0,n) getI(a[i]);
+        sort(a, a+n);
+        printf("%d", a[0]);
+        F(i,0,(n-1)/2){
+            printf(" %d %d", a[i*2+2], a[i*2+1]);
+        }
+        if (n % 2 == 0) printf(" %d\n", a[n-1]);
+        else printf("\n");
     }
     return EXIT_SUCCESS;
 }

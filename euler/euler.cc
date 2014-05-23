@@ -68,7 +68,7 @@ vector<int> getPrimes(int maxN){
     vector<int> pInt;
     int size = 0;
     for (ui i = 0; i< p.size(); i++) 
-        if (p[i]) pInt[size++] = i;
+        if (p[i]) pInt.push_back(i);
     return pInt;
 }
 /*

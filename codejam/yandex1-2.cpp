@@ -1,12 +1,13 @@
 #include <cmath>
 #include <set>
+#include <cstring>
+#include <algorithm>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
 #include <map>
+#include <string>
 #include <set>
 #include <cstdlib>
 #include <fstream>
@@ -14,7 +15,6 @@
 #include <iostream>  
 #include <sstream>  // istringstream buffer(myString);
 #include <stack>
-#include <algorithm>
 #include <cstring>
 #include <cassert>
 using namespace std;
@@ -84,22 +84,41 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+const int fxx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+string A, B, s;
+int a, b;
+int n;
+void lower(string& s){
+    F(i,0,s.size()){
+        if ('A' <= s[i] && s[i] <= 'Z')
+            s[i] = s[i] - 'A' + 'a';
+    }
+}
+int count(string& s, string sub){
+    int c = 0;
+    int p = 0;
+    while( (p = s.find(sub, p)) != string::npos){
+        p += sub.size();
+        c ++;
+    }
+    return c;
+}
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    getline(cin, A);
+    getline(cin, B);
+    getline(cin, s);
+    cin >> n;
+    lower(A);
+    lower(B);
+    lower(s);
+
+/*     cout << A << endl;
+ *     cout << B << endl;
+ *     cout << s << endl;
+ *     cout << s.length() << endl;
+ */
+    a = count(A, s);
+    b = count(B, s);
+    cout << a << ' ' << b << endl;
     return EXIT_SUCCESS;
 }

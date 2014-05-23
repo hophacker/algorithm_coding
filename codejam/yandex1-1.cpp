@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -84,22 +82,75 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+const int fxx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+#define bound(x) (0<=x&&x<=7)
+struct node{
+    int x, y;
+    bool operator == (const node& other)const{
+        return x == other.x && y == other.y;
+    }
+};
+node wk, wr, bk;
+void printChess(node & a){
+    cout << a.x << ' ' << a.y << endl;
+}
+void getPos(node& p){
+    string s;
+    cin >> s;
+    p.x = s[0] - 'a';
+    p.y = s[1] - '1';
+}
+bool attackByKing(){
+    if (wk == bk) return false;
+    return abs(wk.x-bk.x) <= 1 && abs(wk.y-bk.y) <= 1;
+}
+bool inside(int x1, int x2, int x){
+    if (x1 > x2) swap(x1, x2);
+    return x1 < x && x < x2;
+}
+bool attackByRook(){
+    if (wr == bk) return false;
+    if (wr.x == bk.x){
+        return wk.x != bk.x || !inside(wr.y, bk.y, wk.y);
+    }else if (wr.y == bk.y)
+        return wk.y != bk.y || !inside(wr.x, bk.x, wk.x);
+    else return false;
+}
+bool canMove(){
+    bool move = false;
+    F(d,0,8){
+        bk.x += fxx[d][0];
+        bk.y += fxx[d][1];
+        if (bound(bk.x) && bound(bk.y) && !attackByKing() && !attackByRook())
+            move = true;
+        bk.x -= fxx[d][0];
+        bk.y -= fxx[d][1];
+        if (move) break;
+    }
+    return move;
+}
+bool normal(){
+}
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+    getPos(wk);
+    getPos(wr);
+    getPos(bk);
+/*     printChess(wk);
+ *     printChess(wr);
+ *     printChess(bk);
+ */
+    if (attackByKing())
+        cout << "Strange";
+    else{
+        if (!attackByRook()){
+            if (canMove()) cout << "Normal";
+            else cout << "Stalemate";
+        }else{
+            if (canMove()) cout << "Check";
+            else cout << "Checkmate";
+        }
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    cout << endl;
     return EXIT_SUCCESS;
 }

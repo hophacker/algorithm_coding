@@ -1,4 +1,4 @@
-target= Sereja-and-Game
+target= COOK46-ANUBGC_2
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated
@@ -8,6 +8,8 @@ all:
 run:
 	./${target} < in | tee out
 
+justrun:
+	./${target}
 debug:
 	gdb ${target}
 

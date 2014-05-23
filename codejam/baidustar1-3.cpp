@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -57,9 +55,8 @@ using namespace std;
 #define ll long long
 #define fi first
 #define se second
-#define wez(n) int (n); scanf("%d",&(n));
-#define wez2(n,m) int (n),(m); scanf("%d %d",&(n),&(m));
-#define wez3(n,m,k) int (n),(m),(k); scanf("%d %d %d",&(n),&(m),&(k));
+#define wez(n) ui (n); cin >> n;
+#define wez2(n,m) ui (n),(m); cin >> n >> m;
 inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
@@ -83,23 +80,49 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+struct node{
+public:
+    node* one;
+    node* zero;
+    node():one(NULL), zero(NULL){
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+    void insert(ui x, ui lev){
+        if (lev == -1) return;
+        if (bit(x,lev)){
+            if (one == NULL) one = new node();
+            one->insert(x, lev-1);
+        }else{
+            if (zero == NULL) zero = new node();
+            zero->insert(x, lev-1);
+        }
+    }
+    ui find(ui x, int lev){
+        //cout << lev << ' ' << zero << ' ' << one << endl;
+        if (lev == -1) return 0;
+        if (bit(x,lev)){
+            if (zero) return  zero->find(x, lev-1);
+            else return (1 << lev) + one->find(x, lev-1);
+        }else{
+            if (one) return (1 << lev) + one->find(x, lev-1);
+            else return zero->find(x, lev-1);
+        }
+    }
+};
+int main ( int argc, char *argv[] ) {
+    wez(T);
+    node* head;
+    FE(cases,1,T){
+        printf("Case #%d:\n", cases);
+        head = new node();
+        wez2(n,m);
+        F(i,0,n){
+            wez(x);
+            head->insert(x, 31);
+        }
+        F(i,0,m){
+            wez(x);
+            cout << head->find(x, 31) << endl;
+        }
     }
     return EXIT_SUCCESS;
 }

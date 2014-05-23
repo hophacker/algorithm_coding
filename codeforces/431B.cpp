@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -74,6 +74,7 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 typedef int elem_t;
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
@@ -83,23 +84,22 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+int a[5][5];
+
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+    F(i,0,5) F(j,0,5) getI(a[i][j]);
+    int maxV = INT_MIN;
+    F(i0,0,5) 
+    F(i1,0,5) if (i1 != i0)
+    F(i2,0,5) if (i2 != i1 && i2 != i0)
+    F(i3,0,5) if (i3 != i2 && i3 != i1 && i3 != i0)
+    F(i4,0,5) if (i4 != i3 && i4 != i2 && i4 != i1 && i4 != i0){
+        maxV = max(maxV, 
+                    a[i0][i1] + a[i1][i0] + 
+                    a[i1][i2] + a[i2][i1] + 
+                    2*(a[i2][i3] + a[i3][i2] + a[i3][i4] + a[i4][i3])
+                );
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    cout << maxV << endl;
     return EXIT_SUCCESS;
 }

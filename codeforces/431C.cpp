@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -74,6 +74,7 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 typedef int elem_t;
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
@@ -83,23 +84,38 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+const ll mod = 1000000007;
+int k, d;
+
+map<pair<int,bool>, ll> mem;
+ll count(int n, bool satis){
+    if (!satis && n < d){
+        return 0;
+    }
+    if (n == 0){ 
+        return 1;
+    }
+    pair<int,bool> p = make_pair(n,satis);
+    if (mem.find(p) == mem.end()){
+
+        ll sum = 0;
+
+        FE(i,1,k) if (i <= n){
+            if (i >= d)
+                sum += count(n-i,true|satis);
+            else 
+                sum += count(n-i,false|satis);
+            sum %= mod;
+        }
+
+        mem[p] = sum;
+    }
+//    cout << n << ' ' << satis << ' ' << mem[p] << endl;
+    return mem[p];
+}
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    int n;
+    getIII(n,k,d);
+    cout << count(n, false) << endl;
     return EXIT_SUCCESS;
 }

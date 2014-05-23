@@ -1,4 +1,4 @@
-target= 429C
+target= 431D
 
 all:
 	g++ -o $(target) -g $(target).cpp -w
@@ -7,7 +7,10 @@ all:
 .PHONY: run debug
 
 run:
-	./${target} < in
+	./${target} < in | tee out
+
+justrun:
+	./${target} 
 
 debug:
 	gdb ${target}

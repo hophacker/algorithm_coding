@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -83,23 +83,31 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
+    ll n, m, v, k;
     whileZ{
+        cin >> n >> m >> v >> k;
+        if (m >= n)
+            cout << 0;
+        else if(k == 1){
+            cout << -1;
+        }else{ 
+            int steps = 0;
+            while(m < n){
+                if (m < v){
+                    steps = -1;
+                    break;
+                }
+                steps++;
+                ll m1 = (m-v) * k;
+                if (m == m1){
+                    steps = -1;
+                    break;
+                }else m = m1;
+            }
+            cout << steps;
+        }
+        cout << endl;
     }
     return EXIT_SUCCESS;
 }

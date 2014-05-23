@@ -1,3 +1,21 @@
+
+
+// BEGIN CUT HERE
+#define debuging
+#ifdef debuging
+#define FIN  {freopen("new.in" , "r" , stdin) ;}
+#define FOUT {freopen("new.out" , "w" , stdout) ;}
+#define OUT(x)  {cout<< #x << "  : " << x <<endl ;}
+#define ERR(x)  {cout<<"#error: "<< x ; while(1) ;}
+#endif
+#ifndef debuging
+#define FIN  ;
+#define FOUT ;
+#define OUT(x)  ;
+#define ERR(x)  ;
+#endif
+// END CUT HERE
+#include <sstream>
 #include <cmath>
 #include <set>
 #include <list>
@@ -20,7 +38,6 @@
 using namespace std;
 #define bit(x,i) (x&(1<<i))
 #define lowbit(x) ((x)&((x)^((x)-1)))
-#define pow2(x) (1<<x)
 //#define max(a,b) (a<b?b:a)
 //#define abs(x) (x<0?-x:x)
 #define IN(i,l,r) (l<i&&i<r)
@@ -65,8 +82,8 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1);
-#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
+#define printV(a) printA(a,0,(int)a.size()-1);
+#define printVV(a) F(i,0,a.size()) {F(j,0,(int)a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
@@ -84,22 +101,47 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
-    }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
-    return EXIT_SUCCESS;
+const int maxint = -1u>>2 ;
+const double eps = 1e-6 ; 
+class SRMIntermissionPhase
+{
+    public:
+        int countWays(vector <int> points, vector <string> description)
+        {
+
+
+            return int() ;
+        }
+
+        
+// BEGIN CUT HERE
+	public:
+	void run_test(int Case) { if ((Case == -1) || (Case == 0)) test_case_0(); if ((Case == -1) || (Case == 1)) test_case_1(); if ((Case == -1) || (Case == 2)) test_case_2(); if ((Case == -1) || (Case == 3)) test_case_3(); }
+	private:
+	template <typename T> string print_array(const vector<T> &V) { ostringstream os; os << "{ "; for (typename vector<T>::const_iterator iter = V.begin(); iter != V.end(); ++iter) os << '\"' << *iter << "\","; os << " }"; return os.str(); }
+	void verify_case(int Case, const int &Expected, const int &Received) { cerr << "Test Case #" << Case << "..."; if (Expected == Received) cerr << "PASSED" << endl; else { cerr << "FAILED" << endl; cerr << "\tExpected: \"" << Expected << '\"' << endl; cerr << "\tReceived: \"" << Received << '\"' << endl; } }
+	void test_case_0() { int Arr0[] = {25000, 50000, 100000}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"YNN",
+ "NNN"}; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); int Arg2 = 25000; verify_case(0, Arg2, countWays(Arg0, Arg1)); }
+	void test_case_1() { int Arr0[] = {30000, 60000, 90000}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"NYN",
+ "NYN"}; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); int Arg2 = 799969993; verify_case(1, Arg2, countWays(Arg0, Arg1)); }
+	void test_case_2() { int Arr0[] = {25000, 45000, 110000}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"NNN",
+ "YYY"}; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); int Arg2 = 0; verify_case(2, Arg2, countWays(Arg0, Arg1)); }
+	void test_case_3() { int Arr0[] = {25600, 51200, 102400}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"NYY",
+ "YNY",
+ "YYY",
+ "YNN",
+ "YYN",
+ "NNY",
+ "NYN",
+ "NNN"}; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); int Arg2 = 867560805; verify_case(3, Arg2, countWays(Arg0, Arg1)); }
+
+// END CUT HERE
+
+};
+// BEGIN CUT HERE
+int main(){
+    SRMIntermissionPhase ___test;
+    ___test.run_test(-1);
+    return 0;
 }
+// END CUT HERE

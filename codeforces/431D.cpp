@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -18,7 +18,6 @@
 #include <cstring>
 #include <cassert>
 using namespace std;
-#define bit(x,i) (x&(1<<i))
 #define lowbit(x) ((x)&((x)^((x)-1)))
 #define pow2(x) (1<<x)
 //#define max(a,b) (a<b?b:a)
@@ -45,8 +44,8 @@ using namespace std;
 #define REMIN(a,b) (a)=min((a),(b));
 #define FOREACH(i,t) for (typeof(t.begin()) i=t.begin(); i!=t.end(); i++)
 #define ALL(t) t.begin(),t.end()
-#define ll long long
-#define ull unsigned long long
+#define ll unsigned long long
+#define bit(x,i) (x&((ll)1<<i))
 #define ui unsigned int
 #define us unsigned short
 #define IOS ios_base::sync_with_stdio(0);
@@ -54,7 +53,6 @@ using namespace std;
 #define INF 1001001001
 #define PI 3.1415926535897932384626
 #define mp make_pair
-#define ll long long
 #define fi first
 #define se second
 #define wez(n) int (n); scanf("%d",&(n));
@@ -74,6 +72,7 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 typedef int elem_t;
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
@@ -83,23 +82,60 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+
+vector<vector<ll> > generateComb(int n){
+    vector<vector<ll> > comb;
+    comb.push_back(vector<ll>());
+    comb[0].push_back(1);
+    FE(i,1,n){
+        comb.push_back(vector<ll>());
+        comb[i].push_back(1);
+        FE(j,1,i-1){
+            comb[i].push_back(comb[i-1][j-1] + comb[i-1][j]);
+        }
+        comb[i].push_back(1);
+    }
+    return comb;
+}
+vector<vector<ll> > comb;
+
+ll calc(ll n, int k){
+    ll sum = 0;
+    int ones = 0;
+    bool bitOne = false;
+    FFE(i,63,0){
+        if (bit(n,i)) 
+            bitOne = true;
+
+        if (bitOne){
+            if (bit(n,i)){ 
+                if (k-ones >= 0 && k-ones <= i)
+                    sum += comb[i][k-ones];
+                ones++;
+            }
+        }
+    }
+    if (ones == k) sum++;
+    return sum;
+}
+ll m; 
+int k;
 int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+    comb = generateComb(65);
+    cin >> m >> k;
+    ll L = 1, R = 1e18;
+    ll M;
+    while(L <= R){
+        M = (L+R)/2;
+        ll count = calc(M+M,k) - calc(M,k);
+//        cout << L << ' ' << R << ' ' << M << endl;
+//        cout << count << endl;
+        if (count == m)
+            break;
+        else if (count < m)
+            L = M+1;
+        else R = M-1;
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
-    }
+    cout << M << endl;
     return EXIT_SUCCESS;
 }

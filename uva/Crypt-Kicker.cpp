@@ -1,8 +1,6 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -63,7 +61,7 @@ using namespace std;
 inline void pisz(int n) { printf("%d\n",n); }
 #define TESTS wez(testow)while(testow--)
 #define whileZ int T; getI(T); while(T--)
-#define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
+#define printA(a,L,R) FE(i,L,R) cout << a[i] << endl
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
 #define printV(a) printA(a,0,a.size()-1);
 #define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
@@ -84,22 +82,84 @@ int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
 const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+const int fxx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+
+
+string plain = "the quick brown fox jumps over the lazy dog";
+
+
+vector<string> slice(string& s){
+    vector<string> ret;
+    istringstream buffer(s);
+    string word;
+    while(buffer >> word){
+        ret.push_back(word);
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+    return ret;
+}
+bool getInput(vector<string>& sentences){
+    sentences.clear();
+    string s;
+    while(getline(cin, s)){
+        if (s == "") break;
+        else sentences.push_back(s);
+    }
+    return sentences.size() != 0;
+}
+bool canTry(string &s, vector<int> & table){
+    fill(table.begin(), table.end(), -1);
+    if (s.size() != plain.size()) return false;
+
+    F(i,0,plain.size()){
+        if (s[i] == ' ' && plain[i] != ' ' || s[i] != ' ' && plain[i] == ' ')
+            return false;
+    }
+
+    F(i,0,s.size()) if (s[i] != ' '){
+        int enc = s[i] - 'a';
+        if (table[enc] == -1){
+            table[enc] = plain[i]-'a';
+        }else{
+            if (table[enc] != plain[i] - 'a') return false;
+        }
+    }
+    return true;
+}
+void getTable(vector<int>& table, string& s){
+    F(i,0,s.size()) if(s[i] != ' ')
+        table[s[i] - 'a'] = plain[i]-'a';
+}
+void output(vector<string>& sentences, vector<int>& table){
+    F(k,0,sentences.size()){
+        string s = sentences[k];
+        F(i,0,s.length()) {
+            if (s[i] != ' ')
+            s[i] = table[s[i] - 'a'] + 'a';
+        }
+        cout << s << endl;
+    }
+}
+int main ( int argc, char *argv[] ) {
+    string s;
+    vector<string> sentences;
+    vector<int> table(26);
+
+    bool first = true;
+    while(getInput(sentences)){
+        if (first) first = false;
+        else cout << endl;
+
+        bool canDec = false;
+        F(i,0,sentences.size()){
+            if (canTry(sentences[i], table)){
+                canDec = true;
+                getTable(table, sentences[i]);
+                output(sentences, table);
+                break;
+            }
+        }
+        if (!canDec) cout << "No solution." << endl;
     }
     return EXIT_SUCCESS;
 }
+

@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -74,32 +74,75 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
-typedef int elem_t;
-typedef vector<int> vi; 
-typedef vector<vi> vvi; 
-typedef pair<int,int> ii; 
-template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
-template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-int gcd(int a,int b){return a?gcd(b%a,a):b;}
-ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
-ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    /*{
-    FILE* file = fopen(argv[1], "r");
-    int a, b;
-    while(fscanf(file, "%d,%d", &a, &b) != EOF){
-    }*/
-    /*
-    wez(T);
-    FE(cases,1,T){
-        printf("Case #%d: ", cases);
+#define lowb(t) (t &(-t))
+
+
+template <class typev>
+class FenwickTree{
+private:
+    int n;
+    vector<typev> maxVal;
+    vector<typev> val;
+public:
+    FenwickTree(int _n):n(_n){
+        maxVal = vector<typev>(n+1, 0);
+        val = vector<typev>(n+1, 0);
     }
-    }*/
-    /*
-    Solution s = Solution();
-     */
-    whileZ{
+    void update(int i, int v){
+        val[i] = v;
+        for (; i < n; a[i] += v, i += lowb(i));
     }
-    return EXIT_SUCCESS;
+    typev query(int i){
+        typev s = 0;
+        for (; i > 0; s = max(a[i],s), i -= lowb(i));
+        return s;
+    }
+    typev max(){
+        return query(n);
+    }
+};
+
+struct node{
+    int type, p, x;
+};
+int n, q;
+int h[(int)1e5+10];
+int main(){
+    cin >> n >> q;
+    FenwickTree<int> ft(n);
+    map<int,int> height;
+    vector<node> action;
+
+    FE(i,1,n){
+        cin >> h[i];
+        height[h[i]] = 1;
+    }
+
+    while(q--){
+        node act;
+        cin >> act.type;
+        if (act.type == 1){
+            cin >> act.p >> act.x;
+            height[act.x] = 1;
+        }else{
+            cin >> act.x;
+        }
+        action.push_back(act);
+    }
+    int index = 0;
+    vector<int> ;
+    for (auto i = height.begin(); i != height.end(); i++){
+        height[i->first] = ++index;
+    }
+
+    for (int i = 0; i < action.size(); i++){
+
+    }
+
 }
+
+
+
+
+
+
