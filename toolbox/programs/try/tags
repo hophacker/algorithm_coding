@@ -1,0 +1,104 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BACK	UVA10004.cpp	8;"	d	file:
+BACK	graph.cpp	8;"	d	file:
+CROSS	UVA10004.cpp	9;"	d	file:
+CROSS	graph.cpp	9;"	d	file:
+FORWARD	UVA10004.cpp	10;"	d	file:
+FORWARD	graph.cpp	10;"	d	file:
+bfs	UVA10004.cpp	/^    bool bfs(int start)$/;"	f	class:graph
+bfs	graph.cpp	/^    void bfs(int start)$/;"	f	class:graph
+bfs_graph	UVA10004.cpp	/^    virtual void bfs_graph(){$/;"	f	class:graph
+color	UVA10004.cpp	/^    vector<int> color;$/;"	m	class:graph	file:
+degree	UVA10004.cpp	/^    vector<int> degree;$/;"	m	class:graph	file:
+degree	graph.cpp	/^    vector<int> degree;$/;"	m	class:graph	file:
+determineTriangle	determineTriangle.cpp	/^    determineTriangle():graph(){$/;"	f	class:determineTriangle
+determineTriangle	determineTriangle.cpp	/^class determineTriangle:public graph{$/;"	c	file:
+dfs	UVA10004.cpp	/^    void dfs(int v) {$/;"	f	class:graph
+dfs	graph.cpp	/^    void dfs(int v) {$/;"	f	class:graph
+dfs_graph	UVA10004.cpp	/^    bool dfs_graph(){$/;"	f	class:graph
+dfs_graph	graph.cpp	/^    virtual void dfs_graph(){$/;"	f	class:graph
+directed	UVA10004.cpp	/^    int directed;$/;"	m	class:graph	file:
+directed	graph.cpp	/^    int directed;$/;"	m	class:graph	file:
+discovered	UVA10004.cpp	/^    vector<bool> discovered;  \/* which vertices have been found *\/$/;"	m	class:graph	file:
+discovered	graph.cpp	/^    vector<bool> discovered;  \/* which vertices have been found *\/$/;"	m	class:graph	file:
+edge_classification	UVA10004.cpp	/^    virtual int edge_classification(int x, int y) {$/;"	f	class:graph
+edge_classification	determineTriangle.cpp	/^    int edge_classification(int x, int y) {$/;"	f	class:determineTriangle
+edge_classification	findRootInDirectedGraph.cpp	/^    int edge_classification(int x, int y) {$/;"	f	class:findRootInDirectedGraph
+edge_classification	graph.cpp	/^    virtual int edge_classification(int x, int y) {$/;"	f	class:graph
+edgenode	UVA10004.cpp	/^typedef struct edgenode {$/;"	s	file:
+edgenode	UVA10004.cpp	/^} edgenode;$/;"	t	typeref:struct:edgenode	file:
+edgenode	graph.cpp	/^typedef struct edgenode {$/;"	s	file:
+edgenode	graph.cpp	/^} edgenode;$/;"	t	typeref:struct:edgenode	file:
+edges	UVA10004.cpp	/^    vector<edgenode*> edges;$/;"	m	class:graph	file:
+edges	graph.cpp	/^    vector<edgenode*> edges;$/;"	m	class:graph	file:
+entry_time	UVA10004.cpp	/^    vector<int> entry_time;         \/* time of vertex entry *\/$/;"	m	class:graph	file:
+entry_time	graph.cpp	/^    vector<int> entry_time;         \/* time of vertex entry *\/$/;"	m	class:graph	file:
+exit_time	UVA10004.cpp	/^    vector<int> exit_time;          \/* time of vertex exit *\/$/;"	m	class:graph	file:
+exit_time	graph.cpp	/^    vector<int> exit_time;          \/* time of vertex exit *\/$/;"	m	class:graph	file:
+fa	findRootInDirectedGraph.cpp	/^    vector<int> fa;$/;"	m	class:findRootInDirectedGraph	file:
+father	findRootInDirectedGraph.cpp	/^    int father(int x){$/;"	f	class:findRootInDirectedGraph
+findRootInDirectedGraph	findRootInDirectedGraph.cpp	/^    findRootInDirectedGraph():graph(true){$/;"	f	class:findRootInDirectedGraph
+findRootInDirectedGraph	findRootInDirectedGraph.cpp	/^class findRootInDirectedGraph: public graph{$/;"	c	file:
+finished	UVA10004.cpp	/^    bool finished = false;	\/* if true, cut off search immediately *\/$/;"	m	class:graph	file:
+finished	graph.cpp	/^    bool finished = false;	\/* if true, cut off search immediately *\/$/;"	m	class:graph	file:
+getRoot	findRootInDirectedGraph.cpp	/^    int getRoot(){$/;"	f	class:findRootInDirectedGraph
+graph	UVA10004.cpp	/^    graph():directed(false){$/;"	f	class:graph
+graph	UVA10004.cpp	/^    graph(bool dir):directed(dir){$/;"	f	class:graph
+graph	UVA10004.cpp	/^    graph(int n, bool dir):nvertices(n), directed(dir){$/;"	f	class:graph
+graph	UVA10004.cpp	/^class graph{$/;"	c	file:
+graph	graph.cpp	/^    graph():directed(false){$/;"	f	class:graph
+graph	graph.cpp	/^    graph(bool dir):directed(dir){$/;"	f	class:graph
+graph	graph.cpp	/^    graph(int n, bool dir):nvertices(n), directed(dir){$/;"	f	class:graph
+graph	graph.cpp	/^class graph{$/;"	c	file:
+initialize_search	UVA10004.cpp	/^    void initialize_search()$/;"	f	class:graph
+initialize_search	graph.cpp	/^    void initialize_search()$/;"	f	class:graph
+insert_edge	UVA10004.cpp	/^    void insert_edge(int x, int y){$/;"	f	class:graph
+insert_edge	graph.cpp	/^    void insert_edge(int x, int y){$/;"	f	class:graph
+main	UVA10004.cpp	/^int main(){$/;"	f
+main	determineTriangle.cpp	/^int main(){$/;"	f
+main	findRootInDirectedGraph.cpp	/^int main(){$/;"	f
+nedges	UVA10004.cpp	/^    int nedges;$/;"	m	class:graph	file:
+nedges	graph.cpp	/^    int nedges;$/;"	m	class:graph	file:
+next	UVA10004.cpp	/^    struct edgenode *next;		\/* next edge in list *\/$/;"	m	struct:edgenode	typeref:struct:edgenode::edgenode	file:
+next	graph.cpp	/^    struct edgenode *next;		\/* next edge in list *\/$/;"	m	struct:edgenode	typeref:struct:edgenode::edgenode	file:
+nvertices	UVA10004.cpp	/^    int nvertices; \/\/1..nvertices$/;"	m	class:graph	file:
+nvertices	graph.cpp	/^    int nvertices; \/\/1..nvertices$/;"	m	class:graph	file:
+output	determineTriangle.cpp	/^    void output(){$/;"	f	class:determineTriangle
+parent	UVA10004.cpp	/^    vector<int> parent;	\/* discovery relation *\/$/;"	m	class:graph	file:
+parent	graph.cpp	/^    vector<int> parent;	\/* discovery relation *\/$/;"	m	class:graph	file:
+print_graph	UVA10004.cpp	/^    void print_graph() {$/;"	f	class:graph
+print_graph	graph.cpp	/^    void print_graph() {$/;"	f	class:graph
+process_edge	UVA10004.cpp	/^    virtual bool process_edge(int x, int y) {$/;"	f	class:graph
+process_edge	determineTriangle.cpp	/^    void process_edge(int x, int y) {$/;"	f	class:determineTriangle
+process_edge	findRootInDirectedGraph.cpp	/^    void process_edge(int x, int y) {$/;"	f	class:findRootInDirectedGraph
+process_edge	graph.cpp	/^    virtual void process_edge(int x, int y) {$/;"	f	class:graph
+process_vertex_early	UVA10004.cpp	/^    virtual void process_vertex_early(int v) {$/;"	f	class:graph
+process_vertex_early	determineTriangle.cpp	/^    void process_vertex_early(int v) {$/;"	f	class:determineTriangle
+process_vertex_early	findRootInDirectedGraph.cpp	/^    void process_vertex_early(int v) {$/;"	f	class:findRootInDirectedGraph
+process_vertex_early	graph.cpp	/^    virtual void process_vertex_early(int v) {$/;"	f	class:graph
+process_vertex_late	UVA10004.cpp	/^    virtual void process_vertex_late(int v) {$/;"	f	class:graph
+process_vertex_late	determineTriangle.cpp	/^    void process_vertex_late(int v) {$/;"	f	class:determineTriangle
+process_vertex_late	findRootInDirectedGraph.cpp	/^    void process_vertex_late(int v) {$/;"	f	class:findRootInDirectedGraph
+process_vertex_late	graph.cpp	/^    virtual void process_vertex_late(int v) {$/;"	f	class:graph
+processed	UVA10004.cpp	/^    vector<bool> processed;	\/* which vertices have been processed *\/$/;"	m	class:graph	file:
+processed	graph.cpp	/^    vector<bool> processed;	\/* which vertices have been processed *\/$/;"	m	class:graph	file:
+read_graph	UVA10004.cpp	/^    bool read_graph(){$/;"	f	class:graph
+read_graph	findRootInDirectedGraph.cpp	/^    void read_graph(){$/;"	f	class:findRootInDirectedGraph
+read_graph	graph.cpp	/^    bool read_graph(){$/;"	f	class:graph
+setnvertices	UVA10004.cpp	/^    void setnvertices(int n){$/;"	f	class:graph
+setnvertices	graph.cpp	/^    void setnvertices(int n){$/;"	f	class:graph
+time	UVA10004.cpp	/^    int time;                       \/* current event time *\/$/;"	m	class:graph	file:
+time	graph.cpp	/^    int time;                       \/* current event time *\/$/;"	m	class:graph	file:
+timeREE	UVA10004.cpp	7;"	d	file:
+timeREE	graph.cpp	7;"	d	file:
+triangles	determineTriangle.cpp	/^    bool triangles = false;$/;"	m	class:determineTriangle	file:
+weight	UVA10004.cpp	/^    int weight;			\/* edge weight, if any *\/$/;"	m	struct:edgenode	file:
+weight	graph.cpp	/^    int weight;			\/* edge weight, if any *\/$/;"	m	struct:edgenode	file:
+y	UVA10004.cpp	/^    int y;				\/* adjancency info *\/$/;"	m	struct:edgenode	file:
+y	graph.cpp	/^    int y;				\/* adjancency info *\/$/;"	m	struct:edgenode	file:
+yes	UVA10004.cpp	/^    bool yes = true;$/;"	m	class:graph	file:
