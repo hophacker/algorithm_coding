@@ -1,8 +1,8 @@
 #include <cmath>
 #include <set>
 #include <list>
-#include <unordered_set>
-#include <hash_map>
+//#include <unordered_set>
+//#include <hash_map>
 #include <climits>
 #include <queue>
 #include <vector>
@@ -19,7 +19,8 @@
 #include <cassert>
 using namespace std;
 #define bit(x,i) (x&(1<<i))
-#define lowbit(x) ((x)&((x)^((x)-1)))
+#define lowb(t) (t &(-t))
+#define pow2(x) (1<<x)
 //#define max(a,b) (a<b?b:a)
 //#define abs(x) (x<0?-x:x)
 #define IN(i,l,r) (l<i&&i<r)
@@ -56,6 +57,7 @@ using namespace std;
 #define ll long long
 #define fi first
 #define se second
+#define root(x) ((int)sqrt((double)x))
 #define wez(n) int (n); scanf("%d",&(n));
 #define wez2(n,m) int (n),(m); scanf("%d %d",&(n),&(m));
 #define wez3(n,m,k) int (n),(m),(k); scanf("%d %d %d",&(n),&(m),&(k));
@@ -64,15 +66,18 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define whileZ int T; getI(T); while(T--)
 #define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
 #define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1);
+#define printV(a) printA(a,0,(int)a.size()-1);
 #define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 
-#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
+#define tr(c,i) for(auto i = (c).begin(); i != (c).end(); i++) 
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
+template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
+#define tiny (double)1e-13
+#define close(x,y) (abs(x-y)<tiny)
 typedef int elem_t;
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
@@ -82,102 +87,42 @@ template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-using namespace std;
-
-struct TreeNode{
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x): val(x), left(NULL), right(NULL){}
-    TreeNode(int x, TreeNode* l, TreeNode* r): val(x), left(l), right(r){}
+int n, m;
+struct node{
+    int label;
+    int w;
+    bool operator<(const node& other)const{
+        return w > other.w; 
+    }
 };
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-struct Interval {
-    int start;
-    int end;
-    Interval() : start(0), end(0) {}
-    Interval(int s, int e) : start(s), end(e) {}
-};
-
-void printIntervals(vector<Interval> i){
-    F(j,0,i.size()){
-        cout << i[j].start << ' ' << i[j].end << endl;
+bool used[1001];
+int w[1001];
+node v[1001];
+vector<int> L[1001];
+int main ( int argc, char *argv[] ) {
+    cin >> n >> m;
+    FE(i,1,n){
+        getI(w[i]);
+        v[i].w = w[i];
+        v[i].label = i;
     }
-}
-void printTree(TreeNode* cur){
-    if (cur == NULL) return;
-    cout << cur->val << ' ';
-
-    if (cur->left == NULL) cout << "NULL" << ' ';
-    else {
-        cout << cur->left->val << ' ';
+    sort(v+1, v+n+1);
+    while(m--){
+        wez2(x, y);
+        L[x].push_back(y);
+        L[y].push_back(x);
     }
-
-    if (cur->right == NULL) cout << "NULL" << endl;
-    else {
-        cout << cur->right->val << endl;
+    clr(used, false);
+    ll cost = 0;
+    FE(k,1,n){
+        int x = v[k].label;
+        used[x] = true;
+        F(i,0,L[x].size()){
+            int y = L[x][i];
+            if (!used[y])
+                cost += w[y];
+        }
     }
-    printTree(cur->left);
-    printTree(cur->right);
-}
-void addNode(ListNode* &head, int x){
-    ListNode *a = new ListNode(x);
-    if (head == NULL){
-        head = a;
-    }else{
-        a->next = head;
-        head = a;
-    }
-}
-void printList(ListNode* head){
-    while(head != NULL){
-        cout << head->val << ' ';
-        head = head->next;
-    }
-    cout << endl;
-}
-void printDoubleLinkedList(TreeNode* head){
-    TreeNode* h = head;
-    cout << h << endl;
-    do{
-        cout << head->left->val << ' ' << head->val << ' ' << head->right->val << endl;
-        head = head->right;
-        cout << head << endl;
-    }while(head != h);
-}
-
-
-TreeNode* BST2DoubleLinkedList(TreeNode* root){
-    TreeNode *leftHead = NULL, *rightHead = NULL;
-
-
-    if (root->left != NULL){
-        leftHead = convert(root->left);
-    }
-    if (root->right != NULL){
-        rightHead = convert(root->right);
-    }
-
-    root->left = root->right = root;
-
-    if (leftHead != NULL){
-        leftHead->left->right = root;
-        root->left = leftHead->left;
-    }else leftHead = root;
-
-    if (rightHead != NULL){
-        rightHead->left->right = leftHead;
-        leftHead->left = rightHead->left;
-
-        root->right = rightHead;
-        rightHead->left = root;
-    }
-
-    return leftHead;
+    cout << cost << endl;
+    return EXIT_SUCCESS;
 }
