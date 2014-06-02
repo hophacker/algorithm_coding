@@ -1,0 +1,4 @@
+d br
+b 100 if (x == 2 && y == 2 && k == 5)
+r < in
+p sumK[x][y][k]

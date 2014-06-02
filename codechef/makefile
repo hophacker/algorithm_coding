@@ -1,4 +1,4 @@
-target= COOK46-ANUBGC_2
+target= COOK46-Substrings-and-Repetitions
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated

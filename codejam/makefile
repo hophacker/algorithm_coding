@@ -1,4 +1,4 @@
-target= baidustar1-3
+target= 2014-Round2-B
 
 all:
 	g++ -o $(target) -g $(target).cpp -std=c++11 -Wno-deprecated

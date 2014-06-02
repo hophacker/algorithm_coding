@@ -1,94 +1,137 @@
-#include <cmath>
-#include <set>
-#include <list>
-#include <unordered_set>
-#include <hash_map>
-#include <climits>
-#include <queue>
-#include <vector>
-#include <map>
-#include <set>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>   
-#include <iostream>  
-#include <sstream>  // istringstream buffer(myString);
-#include <stack>
+#include <iostream>
 #include <algorithm>
+#include <cmath>
 #include <cstring>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include <cstdio>
 #include <cassert>
+#include <ctime>
+
 using namespace std;
-#define bit(x,i) (x&(1<<i))
-#define lowbit(x) ((x)&((x)^((x)-1)))
-//#define max(a,b) (a<b?b:a)
-//#define abs(x) (x<0?-x:x)
-#define IN(i,l,r) (l<i&&i<r)
-#define LINR(i,l,r) (l<=i&&i<=r)
-#define LIN(i,l,r) (l<=i&&i<r)
-#define INR(i,l,r) (l<i&&i<r)
-#define F(i,L,R) for (int i = L; i < R; i++)
-#define FE(i,L,R) for (int i = L; i <= R; i++)
-#define FF(i,L,R) for (int i = L; i > R; i--)
-#define FFE(i,L,R) for (int i = L; i >= R; i--)
-#define char2Int(c) (c-'0')
-#define lastEle(vec) vec[vec.size()-1]
-#define hBit(msb,n) asm("bsrl %1,%0" : "=r"(msb) : "r"(n))
-#define clr(a,x) memset(a,x,sizeof(a))
-#define getI(a) scanf("%d", &a)
-#define getII(a,b) scanf("%d%d", &a, &b)
-#define getIII(a,b,c) scanf("%d%d%d", &a, &b, &c)
-#define getS(x) scanf("%s", x);
-#define SZ(x) ((int)((x).size()))
-#define REMAX(a,b) (a)=max((a),(b));
-#define DBG(vari) cerr<<#vari<<" = "<<(vari)<<endl;
-#define REMIN(a,b) (a)=min((a),(b));
-#define FOREACH(i,t) for (typeof(t.begin()) i=t.begin(); i!=t.end(); i++)
-#define ALL(t) t.begin(),t.end()
-#define ll long long
-#define ull unsigned long long
-#define ui unsigned int
-#define us unsigned short
-#define IOS ios_base::sync_with_stdio(0);
-#define pb push_back
-#define INF 1001001001
-#define PI 3.1415926535897932384626
-#define mp make_pair
-#define ll long long
-#define fi first
-#define se second
-#define wez(n) int (n); scanf("%d",&(n));
-#define wez2(n,m) int (n),(m); scanf("%d %d",&(n),&(m));
-#define wez3(n,m,k) int (n),(m),(k); scanf("%d %d %d",&(n),&(m),&(k));
-inline void pisz(int n) { printf("%d\n",n); }
-#define TESTS wez(testow)while(testow--)
-#define whileZ int T; getI(T); while(T--)
-#define printA(a,L,R) FE(i,L,R) cout << a[i] << (i==R?'\n':' ')
-#define printM(a,n,m) F(i,0,n){ F(j,0,m) cout << a[i][j] << ' '; cout << endl;}
-#define printV(a) printA(a,0,a.size()-1);
-#define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
-#define MAXN 10000
-#define sz(a) int((a).size()) 
-#define pb push_back 
-#define all(c) (c).begin(),(c).end() 
-#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
-#define present(c,x) ((c).find(x) != (c).end()) 
-#define cpresent(c,x) (find(all(c),x) != (c).end()) 
-typedef int elem_t;
-typedef vector<int> vi; 
-typedef vector<vi> vvi; 
-typedef pair<int,int> ii; 
-template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
-template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
-int gcd(int a,int b){return a?gcd(b%a,a):b;}
-ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
-ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-int main ( int argc, char *argv[] ) {
-    FE(i,1,100)
-        FE(j,i+1,100){
-        int x = sqrt(i*i+j*j);
-        if (x*x == i*i + j*j)
-            cout << i << ' ' << j  << ' ' << x << endl;
-    }
-    return EXIT_SUCCESS;
+
+typedef long long ll;
+typedef long double ld;
+
+#ifdef WIN32
+	#define LLD "%I64d"
+#else
+	#define LLD "%lld"
+#endif
+
+struct pt
+{
+	int x, y;
+	pt() {}
+	pt(int x, int y): x(x), y(y) {}
+};
+
+inline pt operator-(const pt &a, const pt &b)
+{
+	return pt(a.x - b.x, a.y - b.y);
+}
+
+inline ll operator*(const pt &a, const pt &b)
+{
+	return (ll)a.x * b.y - (ll)a.y * b.x;
+}
+
+inline ll operator/(const pt &a, const pt &b)
+{
+	return (ll)a.x * b.x + (ll)a.y * b.y;
+}
+
+inline int sgn(ll a)
+{
+	if (a < 0) return -1;
+	if (a > 0) return 1;
+	return 0;
+}
+
+inline bool on(pt a, pt b, pt c)
+{
+	return (c - a) * (b - a) == 0 && (a - c) / (b - c) < 0;
+}
+
+inline bool intersect(pt a, pt b, pt c, pt d)
+{
+	if (on(a, b, c) || on(a, b, d) || on(c, d, a) || on(c, d, b)) return true;
+	int s1 = sgn((c - a) * (b - a)) * sgn((d - a) * (b - a));
+	int s2 = sgn((a - c) * (d - c)) * sgn((b - c) * (d - c));
+	return s1 < 0 && s2 < 0;
+}
+
+inline bool between(pt a, pt b, pt c)
+{
+	ld aa = atan2(a.y, a.x);
+	ld ab = atan2(b.y, b.x);
+	ld ac = atan2(c.y, c.x);
+	while (ab < aa) ab += 2 * 3.14159265358;
+	while (ac < aa) ac += 2 * 3.14159265358;
+	return ac < ab;
+}
+
+const int maxn = 205;
+const int MOD = 1000000007;
+
+pt p[maxn];
+ll kv[maxn][maxn];
+bool can[maxn][maxn];
+int n;
+
+int main()
+{
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) scanf("%d%d", &p[i].x, &p[i].y);
+	p[n] = p[0];
+	ll sq = 0;
+	for (int i = 0; i < n; i++) sq += p[i] * p[i + 1];
+	if (sq < 0)
+	{
+// 		cout << "inverse" << endl;
+		reverse(p, p + n);
+		p[n] = p[0];
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = i + 2; j < n; j++)
+		{
+			can[i][j] = true;
+			if (!between(p[j + 1] - p[j], p[j - 1] - p[j], p[i] - p[j])) {
+                can[i][j] = false;
+                cout << i << ' ' << j << endl;
+            }
+			for (int t = 0; t < n; t++) if (intersect(p[i], p[j], p[t], p[t + 1])) {
+                can[i][j] = false;
+//                cout << "intersect" << endl;
+            }
+			for (int t = 0; t < n; t++) if (on(p[i], p[j], p[t])){ 
+                can[i][j] = false;
+//                cout << "on" << endl;
+            }
+			can[j][i] = can[i][j];
+		}
+	}
+// 	for (int i = 0; i < n; i++)
+// 	{
+// 		for (int j = 0; j < n; j++) cout << "can " << i << ' ' << j << ' ' << can[i][j] << endl;
+// 	}
+	for (int i = 0; i < n; i++)
+	{
+		kv[i][(i + 1) % n] = 1;
+	}
+	for (int len = 2; len <= n - 1; len++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			int j = (i + len) % n;
+			kv[i][j] = 0;
+			if (len < n - 1 && !can[i][j]) continue;
+			for (int t = 1; t < len; t++) kv[i][j] = (kv[i][j] + kv[i][(i + t) % n] * kv[(i + t) % n][j]) % MOD;
+// 			cout << i << ' ' << j << ' ' << kv[i][j] << endl;
+		}
+	}
+	cout << kv[0][n - 1] << endl;
+	return 0;
 }

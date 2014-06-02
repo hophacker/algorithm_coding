@@ -93,68 +93,94 @@ struct node{
     int label;
     int w;
     bool operator<(const node& other)const{
-        return w < other.w; 
+        return w > other.w; 
     }
 };
 int w[N];
 node v[N];
+bool used[N];
 vector<int>  L[N];
-int used[N];
-int cnt;
-int label;
-int dfs(int x){
-    used[x] = label;
-    cnt++;
-    F(i,0,L[x].size()){
-        int y = L[x][i];
-        if (used[y] != -1 && used[y] != label){
-            dfs(y);
+
+class SetUnion{
+public:
+    vector<int> p;
+    vector<int> size;
+    int n;
+
+    SetUnion(int _n):n(_n){
+        p = vector<int>(n, -1);
+        size = vector<int>(n, 1);
+    }
+
+    int Find(int x){
+        if (p[x] == -1) return x;
+        else return p[x] = Find(p[x]);
+    }
+
+    void Union(int s1, int s2)
+    {
+        int r1, r2;			/* roots of sets */
+
+        r1 = Find(s1);
+        r2 = Find(s2);
+
+
+        if (r1 == r2) return;		/* already in same set */
+
+        if (size[r1] >= size[r2]) {
+            size[r1] = size[r1] + size[r2];
+            p[r2] = r1;
+        }
+        else {
+            size[r2] = size[r1] + size[r2];
+            p[r1] = r2;
         }
     }
-}
+
+};
+
 int main ( int argc, char *argv[] ) {
     cin >> n >> m;
-    FE(i,1,n) {
+    F(i,0,n){
         getI(w[i]);
         v[i].w = w[i];
         v[i].label = i;
     }
-    sort(v+1, v+n+1);
     while(m--){
         wez2(x, y);
+        x--, y--;
         L[x].push_back(y);
         L[y].push_back(x);
     }
-    clr(used, 0);
+    sort(v, v+n);
+
+/*     F(i,0,n){
+ *         cout << "label: " << v[i].label << ' ' << v[i].w << endl;
+ *     }
+ */
+    SetUnion SU(n);
+
+    clr(used, false);
+
     ll cost = 0;
-    label = 0;
-    FE(k,1,n){
+    F(k,0,n){
         int x = v[k].label;
-//        cout << "label : " << x << endl;
-        label++;
-        used[x] = -1;
-        vector<int> num;
+        used[x] = true;
+        ll sum = 0;
+        ll cnt = 0;
         F(i,0,L[x].size()){
             int y = L[x][i];
-            if (used[y] != -1 && used[y] != label){
-                cnt = 0;
-                dfs(y);
-                num.push_back(cnt);
+            int fay = SU.Find(y);
+            int fax = SU.Find(x);
+            if (fax != fay && used[fay]) {
+                int size = SU.size[fay];
+                SU.Union(x, y);
+                cnt += size * (sum+1);
+                sum += size;
             }
         }
-        ll c = 0;
-        F(i,0,num.size()){
-            c += num[i];
-            if (i != 0){
-                c += num[i] * num[i-1];
-                num[i] += num[i-1];
-            }
-        }
-//        printV(num);
-        cost += c * v[k].w;
-//        cout << cost << endl;
+        cost += cnt * v[k].w;
     }
     printf("%.6lf\n", ((double) cost)*2/n/(n-1));
     return EXIT_SUCCESS;
 }
-
