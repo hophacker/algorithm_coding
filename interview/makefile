@@ -1,4 +1,4 @@
-target= convert-BST-to-doublelinkedlist
+target= expression
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
