@@ -1,0 +1,13 @@
+//http://www.mitbbs.com/article_t/JobHunting/32709291.html
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+
+vector<string> convert_string_to_words(string s){
+
+
+}
+int main(){
+}
