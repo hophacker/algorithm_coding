@@ -1,4 +1,4 @@
-target= lru-cache
+target= fuck
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
