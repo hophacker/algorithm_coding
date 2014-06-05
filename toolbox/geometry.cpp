@@ -91,15 +91,36 @@
     */
 
     // 1.3 多边形
-#include <stdlib.h>
-#include <math.h>
-#define MAXN 1000
+
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
+using namespace std;
+#define MAXN 401
 #define offset 10000
-#define eps 1e-8
+#define eps 1e-1
 #define zero(x) (((x)>0?(x):-(x))<eps)
 #define _sign(x) ((x)>eps?1:((x)<-eps?2:0))
 #define abs(x) ((x)>0?(x):-(x))
-struct point{double x,y;};
+#define F(i,L,R) for (int i = L; i < R; i++)
+#define FE(i,L,R) for (int i = L; i <= R; i++)
+#define ll long long
+#define clr(a,x) memset(a,x,sizeof(a))
+struct point{
+    double x,y;
+    point operator-(const point &other){
+        return point(x-other.x, y-other.y);
+    }
+    double operator*(const point &b){
+        return x * b.y - y * b.x;
+    }
+
+    point(){};
+    point(double xx, double yy):x(xx),y(yy){ }
+};
 struct line{point a,b;};
 struct point3{double x,y,z;};
 struct line3{point3 a,b;};
@@ -114,6 +135,9 @@ int dot_online_in(point3 p,line3 l);
 int dot_online_in(point3 p,point3 l1,point3 l2);
 double xmult(point p1,point p2,point p0){
     return (p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y);
+}
+double xmult(point p1,point p2){
+    return (p1.x)*(p2.y)-(p2.x)*(p1.y);
 }
 
 //三维几何
@@ -257,7 +281,7 @@ point3 pvec(point3 s1,point3 s2,point3 s3){
     return xmult(subt(s1,s2),subt(s2,s3));
 }
 //两点距离,单参数取向量大小
-double distance(point3 p1,point3 p2){
+double Distance(point3 p1,point3 p2){
     return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y)+(p1.z-p2.z)*(p1.z-p2.z));
 }
 //向量大小
@@ -366,10 +390,10 @@ line3 intersection(point3 u1,point3 u2,point3 u3,point3 v1,point3 v2,point3 v3){
 }
 //点到直线距离
 double ptoline(point3 p,line3 l){
-    return vlen(xmult(subt(p,l.a),subt(l.b,l.a)))/distance(l.a,l.b);
+    return vlen(xmult(subt(p,l.a),subt(l.b,l.a)))/Distance(l.a,l.b);
 }
 double ptoline(point3 p,point3 l1,point3 l2){
-    return vlen(xmult(subt(p,l1),subt(l2,l1)))/distance(l1,l2);
+    return vlen(xmult(subt(p,l1),subt(l2,l1)))/Distance(l1,l2);
 }
 //点到平面距离
 double ptoplane(point3 p,plane3 s){
@@ -462,11 +486,11 @@ int grid_inside(int n,point* p){
     return (abs(ret)-grid_onedge(n,p))/2+1;
 }
 //1.12 圆
-double distance(point p1,point p2){
+double Distance(point p1,point p2){
     return sqrt((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
 }
 double disptoline(point p,point l1,point l2){
-    return fabs(xmult(p,l1,l2))/distance(l1,l2);
+    return fabs(xmult(p,l1,l2))/Distance(l1,l2);
 }
 
 point intersection(point u1,point u2,point v1,point v2){
@@ -483,7 +507,7 @@ int intersect_line_circle(point c,double r,point l1,point l2){
 }
 //判线段和圆相交,包括端点和相切
 int intersect_seg_circle(point c,double r,point l1,point l2){
-    double t1=distance(c,l1)-r,t2=distance(c,l2)-r;
+    double t1=Distance(c,l1)-r,t2=Distance(c,l2)-r;
     point t=c;
     if (t1<eps||t2<eps)
         return t1>-eps||t2>-eps;
@@ -493,18 +517,18 @@ int intersect_seg_circle(point c,double r,point l1,point l2){
 }
 //判圆和圆相交,包括相切
 int intersect_circle_circle(point c1,double r1,point c2,double r2){
-    return distance(c1,c2)<r1+r2+eps&&distance(c1,c2)>fabs(r1-r2)-eps;
+    return Distance(c1,c2)<r1+r2+eps&&Distance(c1,c2)>fabs(r1-r2)-eps;
 }
 //计算圆上到点 p 最近点,如 p 与圆心重合,返回 p 本身
 point dot_to_circle(point c,double r,point p){
     point u,v;
-    if (distance(p,c)<eps)
+    if (Distance(p,c)<eps)
         return p;
-    u.x=c.x+r*fabs(c.x-p.x)/distance(c,p);
-    u.y=c.y+r*fabs(c.y-p.y)/distance(c,p)*((c.x-p.x)*(c.y-p.y)<0?-1:1);
-    v.x=c.x-r*fabs(c.x-p.x)/distance(c,p);
-    v.y=c.y-r*fabs(c.y-p.y)/distance(c,p)*((c.x-p.x)*(c.y-p.y)<0?-1:1);
-    return distance(u,p)<distance(v,p)?u:v;
+    u.x=c.x+r*fabs(c.x-p.x)/Distance(c,p);
+    u.y=c.y+r*fabs(c.y-p.y)/Distance(c,p)*((c.x-p.x)*(c.y-p.y)<0?-1:1);
+    v.x=c.x-r*fabs(c.x-p.x)/Distance(c,p);
+    v.y=c.y-r*fabs(c.y-p.y)/Distance(c,p)*((c.x-p.x)*(c.y-p.y)<0?-1:1);
+    return Distance(u,p)<Distance(v,p)?u:v;
 }
 //计算直线与圆的交点,保证直线与圆有交点
 //计算线段与圆的交点可用这个函数后判点是否在线段上
@@ -514,7 +538,7 @@ void intersection_line_circle(point c,double r,point l1,point l2,point& p1,point
     p.x+=l1.y-l2.y;
     p.y+=l2.x-l1.x;
     p=intersection(p,c,l1,l2);
-    t=sqrt(r*r-distance(p,c)*distance(p,c))/distance(l1,l2);
+    t=sqrt(r*r-Distance(p,c)*Distance(p,c))/Distance(l1,l2);
     p1.x=p.x+(l2.x-l1.x)*t;
     p1.y=p.y+(l2.y-l1.y)*t;
     p2.x=p.x-(l2.x-l1.x)*t;
@@ -524,7 +548,7 @@ void intersection_line_circle(point c,double r,point l1,point l2,point& p1,point
 void intersection_circle_circle(point c1,double r1,point c2,double r2,point& p1,point& p2){
     point u,v;
     double t;
-    t=(1+(r1*r1-r2*r2)/distance(c1,c2)/distance(c1,c2))/2;
+    t=(1+(r1*r1-r2*r2)/Distance(c1,c2)/Distance(c1,c2))/2;
     u.x=c1.x+(c2.x-c1.x)*t;
     u.y=c1.y+(c2.y-c1.y)*t;
     v.x=u.x+c1.y-c2.y;
@@ -622,14 +646,14 @@ inline int dot_online_in(point p,point l1,point l2){
     return zero(xmult(p,l1,l2))&&(l1.x-p.x)*(l2.x-p.x)<eps&&(l1.y-p.y)*(l2.y-p.y)<eps;
 }
 //判线段在任意多边形内,顶点按顺时针或逆时针给出,与边界相交返回 1
-int inside_polygon(point l1,point l2,int n,point* p){
+bool inside_polygon(point l1,point l2,int n,point* p){
     point t[MAXN],tt;
     int i,j,k=0;
     if (!inside_polygon(l1,n,p)||!inside_polygon(l2,n,p))
-        return 0;
+        return false;
     for (i=0;i<n;i++)
         if (opposite_side(l1,l2,p[i],p[(i+1)%n])&&opposite_side(p[i],p[(i+1)%n],l1,l2))
-            return 0;
+            return false;
         else if (dot_online_in(l1,p[i],p[(i+1)%n]))
             t[k++]=l1;
         else if (dot_online_in(l2,p[i],p[(i+1)%n]))
@@ -641,9 +665,9 @@ int inside_polygon(point l1,point l2,int n,point* p){
             tt.x=(t[i].x+t[j].x)/2;
             tt.y=(t[i].y+t[j].y)/2;
             if (!inside_polygon(tt,n,p))
-                return 0;
+                return false;
         }
-    return 1;
+    return true;
 }
 point intersection(line u,line v){
     point ret=u.a;
@@ -693,7 +717,7 @@ double dmult(double x1,double y1,double x2,double y2,double x0,double y0){
     return (x1-x0)*(x2-x0)+(y1-y0)*(y2-y0);
 }
 //两点距离
-double distance(double x1,double y1,double x2,double y2){
+double Distance(double x1,double y1,double x2,double y2){
     return sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
 }
 //判三点共线
@@ -779,24 +803,24 @@ point ptoline(point p,point l1,point l2){
 }
 //点到直线距离
 double disptoline(point p,line l){
-    return fabs(xmult(p,l.a,l.b))/distance(l.a,l.b);
+    return fabs(xmult(p,l.a,l.b))/Distance(l.a,l.b);
 }
 double disptoline(double x,double y,double x1,double y1,double x2,double y2){
-    return fabs(xmult(x,y,x1,y1,x2,y2))/distance(x1,y1,x2,y2);
+    return fabs(xmult(x,y,x1,y1,x2,y2))/Distance(x1,y1,x2,y2);
 }
 //点到线段上的最近点
 point ptoseg(point p,line l){
     point t=p;
     t.x+=l.a.y-l.b.y,t.y+=l.b.x-l.a.x;
     if (xmult(l.a,t,p)*xmult(l.b,t,p)>eps)
-        return distance(p,l.a)<distance(p,l.b)?l.a:l.b;
+        return Distance(p,l.a)<Distance(p,l.b)?l.a:l.b;
     return intersection(p,t,l.a,l.b);
 }
 point ptoseg(point p,point l1,point l2){
     point t=p;
     t.x+=l1.y-l2.y,t.y+=l2.x-l1.x;
     if (xmult(l1,t,p)*xmult(l2,t,p)>eps)
-        return distance(p,l1)<distance(p,l2)?l1:l2;
+        return Distance(p,l1)<Distance(p,l2)?l1:l2;
     return intersection(p,t,l1,l2);
 }
 //点到线段距离
@@ -804,15 +828,15 @@ double disptoseg(point p,line l){
     point t=p;
     t.x+=l.a.y-l.b.y,t.y+=l.b.x-l.a.x;
     if (xmult(l.a,t,p)*xmult(l.b,t,p)>eps)
-        return distance(p,l.a)<distance(p,l.b)?distance(p,l.a):distance(p,l.b);
-    return fabs(xmult(p,l.a,l.b))/distance(l.a,l.b);
+        return Distance(p,l.a)<Distance(p,l.b)?Distance(p,l.a):Distance(p,l.b);
+    return fabs(xmult(p,l.a,l.b))/Distance(l.a,l.b);
 }
 double disptoseg(point p,point l1,point l2){
     point t=p;
     t.x+=l1.y-l2.y,t.y+=l2.x-l1.x;
     if (xmult(l1,t,p)*xmult(l2,t,p)>eps)
-        return distance(p,l1)<distance(p,l2)?distance(p,l1):distance(p,l2);
-    return fabs(xmult(p,l1,l2))/distance(l1,l2);
+        return Distance(p,l1)<Distance(p,l2)?Distance(p,l1):Distance(p,l2);
+    return fabs(xmult(p,l1,l2))/Distance(l1,l2);
 }
 //矢量 V 以 P 为顶点逆时针旋转 angle 并放大 scale 倍
 point rotate(point v,point p,double angle,double scale){
@@ -942,10 +966,100 @@ point fermentpoint(point a,point b,point c){
                     v.x=u.x+step*i;
                     v.y=u.y+step*j;
                     if
-                        (distance(u,a)+distance(u,b)+distance(u,c)>distance(v,a)+distance(v,b)+distance(v,c))
+                        (Distance(u,a)+Distance(u,b)+Distance(u,c)>Distance(v,a)+Distance(v,b)+Distance(v,c))
                             u=v;
                 }
     return u;
 }
+
+point p[401];
+bool can[400][400];
+ll f[400][400];
+int n;
+
+#define nn(x) (x>=n?x-n:x)
+const ll mod =  1000000007;
+
+
+inline bool between(point a, point b, point c)
+{
+	double aa = atan2(a.y, a.x);
+	double ab = atan2(b.y, b.x);
+	double ac = atan2(c.y, c.x);
+	while (ab < aa) ab += 2 * 3.14159265358;
+	while (ac < aa) ac += 2 * 3.14159265358;
+	return ac < ab;
+}
+
+bool inside_polygon(int j1, int j2, int n, point p[], double area){
+//    assert(j1 < j2);
+/* 	double area = 0;
+ * 	for (int i = 0; i < n; i++) area += p[i] * p[i + 1];
+ * 	if (area < 0){
+ * 		reverse(p, p + n);
+ *         area = -area;
+ * 	}
+ *     p[n] = p[0];
+ */
+
+    double sq = 0;
+	for (int i = 0; i < j1; i++) sq += p[i] * p[i + 1];
+    sq += p[j1] * p[j2];
+	for (int i = j2; i < n; i++) sq += p[i] * p[i + 1];
+    return 0 <= sq && sq <= area;
+}
 int main(){
+    scanf("%d", &n);
+    clr(can, true);
+    for (int i = 0; i < n; i++){
+        scanf("%lf %lf", &p[i].x, &p[i].y);
+//        printf("%lf %lf\n", p[i].x, p[i].y);
+    }
+    p[n] = p[0];
+
+	double sq = 0;
+	for (int i = 0; i < n; i++) sq += p[i] * p[i + 1];
+	if (sq < 0)
+	{
+		reverse(p, p + n);
+		p[n] = p[0];
+        sq = -sq;
+	}
+
+
+
+    F(i,0,n)
+        F(j,i+2,n){
+            if (i == 0 && j == n-1) continue;
+//            if (!inside_polygon(p[j], p[i], n, p)){
+            if (!inside_polygon(i, j, n, p, sq)){
+//			if (!between(p[j + 1] - p[j], p[j - 1] - p[j], p[i] - p[j])) {
+//                cout << i << ' ' << j << endl;
+                can[i][j] = can[j][i] = false;
+                continue;
+            }
+            F(k,0,n)
+                if (intersect_ex(p[i], p[j], p[k], p[k+1]) || dot_online_ex(p[k], p[i], p[j])){
+                    can[i][j] = can[j][i] = false;
+                    break;
+                }
+        }
+    clr(f, 0);
+
+    F(i,0,n){
+        if (can[i][nn(i+2)]) f[i][nn(i+2)] = 1;
+        f[i][nn(i+1)] = 1;
+    }
+
+
+    FE(d,3,n-1){
+        F(i,0,n){
+            int id = nn(i+d);
+            if (can[i][id])
+                FE(j,i+1,d+i-1)  if (can[i][nn(j)] && can[nn(j)][id]){
+                    f[i][id] = (f[i][id] +  f[i][nn(j)] * f[nn(j)][id]) % mod;
+                }
+        }
+    }
+    cout << f[0][n-1] << endl;
 }

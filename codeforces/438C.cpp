@@ -981,17 +981,33 @@ int n;
 #define nn(x) (x>=n?x-n:x)
 const ll mod =  1000000007;
 
-typedef  point pt;
-typedef double ld;
 
-inline bool between(pt a, pt b, pt c)
+inline bool between(point a, point b, point c)
 {
-	ld aa = atan2(a.y, a.x);
-	ld ab = atan2(b.y, b.x);
-	ld ac = atan2(c.y, c.x);
+	double aa = atan2(a.y, a.x);
+	double ab = atan2(b.y, b.x);
+	double ac = atan2(c.y, c.x);
 	while (ab < aa) ab += 2 * 3.14159265358;
 	while (ac < aa) ac += 2 * 3.14159265358;
 	return ac < ab;
+}
+
+bool inside_polygon(int j1, int j2, int n, point p[], double area){
+//    assert(j1 < j2);
+/* 	double area = 0;
+ * 	for (int i = 0; i < n; i++) area += p[i] * p[i + 1];
+ * 	if (area < 0){
+ * 		reverse(p, p + n);
+ *         area = -area;
+ * 	}
+ *     p[n] = p[0];
+ */
+
+    double sq = 0;
+	for (int i = 0; i < j1; i++) sq += p[i] * p[i + 1];
+    sq += p[j1] * p[j2];
+	for (int i = j2; i < n; i++) sq += p[i] * p[i + 1];
+    return 0 <= sq && sq <= area;
 }
 int main(){
     scanf("%d", &n);
@@ -1008,24 +1024,17 @@ int main(){
 	{
 		reverse(p, p + n);
 		p[n] = p[0];
+        sq = -sq;
 	}
 
-    if (p[0].x == -744281){
-        cout << 144076085 << endl;
-        return 0;
-    }
-
-    if (p[0].x == -62958){
-        cout << 589057227 << endl;
-        return 0;
-    }
 
 
     F(i,0,n)
         F(j,i+2,n){
             if (i == 0 && j == n-1) continue;
 //            if (!inside_polygon(p[j], p[i], n, p)){
-			if (!between(p[j + 1] - p[j], p[j - 1] - p[j], p[i] - p[j])) {
+            if (!inside_polygon(i, j, n, p, sq)){
+//			if (!between(p[j + 1] - p[j], p[j - 1] - p[j], p[i] - p[j])) {
 //                cout << i << ' ' << j << endl;
                 can[i][j] = can[j][i] = false;
                 continue;

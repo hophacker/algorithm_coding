@@ -1,4 +1,4 @@
-target= fuck
+target= expression
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
