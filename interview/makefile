@@ -1,4 +1,4 @@
-target= expression
+target= BSTIterator
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
