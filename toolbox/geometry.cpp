@@ -432,41 +432,6 @@ double angle_sin(line3 l,plane3 s){
 double angle_sin(point3 l1,point3 l2,point3 s1,point3 s2,point3 s3){
     return dmult(subt(l1,l2),pvec(s1,s2,s3))/vlen(subt(l1,l2))/vlen(pvec(s1,s2,s3));
 }
-//1.10 凸包
-//计算 cross product (P1-P0)x(P2-P0)
-//graham 算法顺时针构造包含所有共线点的凸包,O(nlogn)
-point p1,p2;
-int graham_cp(const void* a,const void* b){
-    double ret=xmult(*((point*)a),*((point*)b),p1);
-    return zero(ret)?(xmult(*((point*)a),*((point*)b),p2)>0?1:-1):(ret>0?1:-1);
-}
-void _graham(int n,point* p,int& s,point* ch){
-    int i,k=0;
-    for (p1=p2=p[0],i=1;i<n;p2.x+=p[i].x,p2.y+=p[i].y,i++)
-        if (p1.y-p[i].y>eps||(zero(p1.y-p[i].y)&&p1.x>p[i].x))
-            p1=p[k=i];
-    p2.x/=n,p2.y/=n;
-    p[k]=p[0],p[0]=p1;
-    qsort(p+1,n-1,sizeof(point),graham_cp);
-    for (ch[0]=p[0],ch[1]=p[1],ch[2]=p[2],s=i=3;i<n;ch[s++]=p[i++])
-        for (;s>2&&xmult(ch[s-2],p[i],ch[s-1])<-eps;s--);
-}
-//构造凸包接口函数,传入原始点集大小 n,点集 p(p 原有顺序被打乱!)
-//返回凸包大小,凸包的点在 convex 中
-//参数 maxsize 为 1 包含共线点,为 0 不包含共线点,缺省为 1
-//参数 clockwise 为 1 顺时针构造,为 0 逆时针构造,缺省为 1
-//在输入仅有若干共线点时算法不稳定,可能有此类情况请另行处理!
-//不能去掉点集中重合的点
-int graham(int n,point* p,point* convex,int maxsize=1,int dir=1){
-    point* temp=new point[n];
-    int s,i;
-    _graham(n,p,s,temp);
-    for (convex[0]=temp[0],n=1,i=(dir?1:(s-1));dir?(i<s):i;i+=(dir?1:-1))
-        if (maxsize||!zero(xmult(temp[i-1],temp[i],temp[(i+1)%s])))
-            convex[n++]=temp[i];
-    delete []temp;
-    return n;
-}
 //1.11 网格
 int gcd(int a,int b){
     return b?gcd(b,a%b):a;
@@ -861,14 +826,6 @@ double area_triangle(double a,double b,double c){
     double s=(a+b+c)/2;
     return sqrt(s*(s-a)*(s-b)*(s-c));
 }
-//计算多边形面积,顶点按顺时针或逆时针给出
-double area_polygon(int n,point* p){
-    double s1=0,s2=0;
-    int i;
-    for (i=0;i<n;i++)
-        s1+=p[(i+1)%n].y*p[i].x,s2+=p[(i+1)%n].y*p[(i+2)%n].x;
-    return fabs(s1-s2)/2;
-}
 //1.7 球面
 #include <math.h>
 const double pi=acos(-1);
@@ -972,14 +929,9 @@ point fermentpoint(point a,point b,point c){
     return u;
 }
 
-point p[401];
-bool can[400][400];
-ll f[400][400];
-int n;
 
 #define nn(x) (x>=n?x-n:x)
 const ll mod =  1000000007;
-
 
 inline bool between(point a, point b, point c)
 {
@@ -991,75 +943,80 @@ inline bool between(point a, point b, point c)
 	return ac < ab;
 }
 
-bool inside_polygon(int j1, int j2, int n, point p[], double area){
-//    assert(j1 < j2);
-/* 	double area = 0;
- * 	for (int i = 0; i < n; i++) area += p[i] * p[i + 1];
- * 	if (area < 0){
- * 		reverse(p, p + n);
- *         area = -area;
- * 	}
- *     p[n] = p[0];
- */
 
-    double sq = 0;
-	for (int i = 0; i < j1; i++) sq += p[i] * p[i + 1];
-    sq += p[j1] * p[j2];
-	for (int i = j2; i < n; i++) sq += p[i] * p[i + 1];
-    return 0 <= sq && sq <= area;
-}
-int main(){
-    scanf("%d", &n);
-    clr(can, true);
-    for (int i = 0; i < n; i++){
-        scanf("%lf %lf", &p[i].x, &p[i].y);
-//        printf("%lf %lf\n", p[i].x, p[i].y);
+class polygon{
+private:
+    vector<point> p;
+    int n;
+    bool _area_finished = false;
+    double _area;
+public:
+    polygon(){
+        input();
     }
-    p[n] = p[0];
-
-	double sq = 0;
-	for (int i = 0; i < n; i++) sq += p[i] * p[i + 1];
-	if (sq < 0)
-	{
-		reverse(p, p + n);
-		p[n] = p[0];
-        sq = -sq;
-	}
-
-
-
-    F(i,0,n)
-        F(j,i+2,n){
-            if (i == 0 && j == n-1) continue;
-//            if (!inside_polygon(p[j], p[i], n, p)){
-            if (!inside_polygon(i, j, n, p, sq)){
-//			if (!between(p[j + 1] - p[j], p[j - 1] - p[j], p[i] - p[j])) {
-//                cout << i << ' ' << j << endl;
-                can[i][j] = can[j][i] = false;
-                continue;
-            }
-            F(k,0,n)
-                if (intersect_ex(p[i], p[j], p[k], p[k+1]) || dot_online_ex(p[k], p[i], p[j])){
-                    can[i][j] = can[j][i] = false;
-                    break;
-                }
+    //Return the area of this polygon, points are given either clockwise or anticlockwise
+    double area(){
+        if (!_area_finished) {
+            _area_finished = true;
+            _area = 0;
+            for (int i=0;i<n;i++) _area += p[i] * p[i+1];
+            _area = fabs(_area)/2;
         }
-    clr(f, 0);
-
-    F(i,0,n){
-        if (can[i][nn(i+2)]) f[i][nn(i+2)] = 1;
-        f[i][nn(i+1)] = 1;
+        return _area;
     }
-
-
-    FE(d,3,n-1){
-        F(i,0,n){
-            int id = nn(i+d);
-            if (can[i][id])
-                FE(j,i+1,d+i-1)  if (can[i][nn(j)] && can[nn(j)][id]){
-                    f[i][id] = (f[i][id] +  f[i][nn(j)] * f[nn(j)][id]) % mod;
-                }
+    void input(){
+        cin >> n;
+        p.resize(n+1);
+        for (int i = 0; i < n; i++){
+            double x, y;
+            cin >> p[i].x >> p[i].y;
         }
+        p[n] = p[0];
     }
-    cout << f[0][n-1] << endl;
-}
+    /*
+     * Judge if "the whole of" of a line connected by j1th point to j2th point is inside of the polygon or not.
+     */
+    bool connected_line_inside_polygon(int j1, int j2){
+        double s = 0;
+        for (int i = 0; i < j1; i++) s += p[i] * p[i + 1];
+        s += p[j1] * p[j2];
+        for (int i = j2; i < n; i++) s += p[i] * p[i + 1];
+        s = fabs(s)/2;
+        return 0 <= s && s <= area();
+    }
+    //1.10 凸包
+    //计算 cross product (P1-P0)x(P2-P0)
+    //graham 算法顺时针构造包含所有共线点的凸包,O(nlogn)
+    point p1,p2;
+    int graham_cp(const void* a,const void* b){
+        double ret=xmult(*((point*)a),*((point*)b),p1);
+        return zero(ret)?(xmult(*((point*)a),*((point*)b),p2)>0?1:-1):(ret>0?1:-1);
+    }
+    void _graham(int n,point* p,int& s,point* ch){
+        int i,k=0;
+        for (p1=p2=p[0],i=1;i<n;p2.x+=p[i].x,p2.y+=p[i].y,i++)
+            if (p1.y-p[i].y>eps||(zero(p1.y-p[i].y)&&p1.x>p[i].x))
+                p1=p[k=i];
+        p2.x/=n,p2.y/=n;
+        p[k]=p[0],p[0]=p1;
+        qsort(p+1,n-1,sizeof(point),graham_cp);
+        for (ch[0]=p[0],ch[1]=p[1],ch[2]=p[2],s=i=3;i<n;ch[s++]=p[i++])
+            for (;s>2&&xmult(ch[s-2],p[i],ch[s-1])<-eps;s--);
+    }
+    //构造凸包接口函数,传入原始点集大小 n,点集 p(p 原有顺序被打乱!)
+    //返回凸包大小,凸包的点在 convex 中
+    //参数 maxsize 为 1 包含共线点,为 0 不包含共线点,缺省为 1
+    //参数 clockwise 为 1 顺时针构造,为 0 逆时针构造,缺省为 1
+    //在输入仅有若干共线点时算法不稳定,可能有此类情况请另行处理!
+    //不能去掉点集中重合的点
+    int graham(int n,point* p,point* convex,int maxsize=1,int dir=1){
+        point* temp=new point[n];
+        int s,i;
+        _graham(n,p,s,temp);
+        for (convex[0]=temp[0],n=1,i=(dir?1:(s-1));dir?(i<s):i;i+=(dir?1:-1))
+            if (maxsize||!zero(xmult(temp[i-1],temp[i],temp[(i+1)%s])))
+                convex[n++]=temp[i];
+        delete []temp;
+        return n;
+    }
+};

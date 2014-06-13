@@ -1,4 +1,4 @@
-target= circles-with-common-vertex
+target= singleton
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w

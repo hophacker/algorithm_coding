@@ -1,0 +1,19 @@
+#include<iostream>
+using namespace std;
+
+
+struct TreeNode{
+    TreeNode *left;
+    TreeNode *right;
+    int data;
+};
+
+class BST{
+    TreeNode* root;
+    BST(){
+    }
+    void insert(int x){
+    }
+    bool find(int x){
+    }
+};

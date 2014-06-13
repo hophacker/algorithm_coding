@@ -29,7 +29,9 @@ public:
 
     void add(TreeNode<T>* newNode, TreeNode<T>*& cur, TreeNode<T>* parent){
         if (!cur) cur = newNode, cur->parent = parent;
-        else if (newNode->data == cur->data){cout << "Duplicate Nodes" << endl;}
+        else if (newNode->data == cur->data){
+            cout << "Duplicate Nodes" << endl;
+        }
         else if (newNode->data < cur->data)
             add(newNode, cur->left, cur);
         else 

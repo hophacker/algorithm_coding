@@ -1,4 +1,4 @@
-target= BSTIterator
+target= median-of-two-sorted-arrays
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w

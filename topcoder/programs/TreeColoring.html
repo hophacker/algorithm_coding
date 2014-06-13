@@ -1,0 +1,74 @@
+<html><body bgcolor="#000000" text="#ffffff"><table><tr><td colspan="2"><h3>Problem Statement</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><p><i>Please note that this problem has a non-standard time limit: 4 seconds.</i></p>
+<br></br>
+<p>Dimas is very fond of trees, he really enjoys solving problems on trees. Recently, his professor Rohit gave him a very difficult task to solve. This is it:</p>
+
+<br></br>
+
+<p>You're given a tree on <b>N</b> vertices. (A tree is an undirected connected graph with no cycles.) Different edges of the tree may have different lengths. Initially, all vertices are white.
+You now have to process <b>Q</b> queries. There are two types of queries:
+<ul>
+<li>type 1: Given a node x, paint it blue.</li>
+<li>type 2: Given a node x, compute the sum of all distances between x and a blue node.</li>
+</ul>
+</p>
+
+<br></br>
+
+<p>You are given the ints <b>N</b>, <b>Q</b>, <b>startSeed</b>, <b>threshold</b>, and <b>maxDist</b>. Use the algorithm given below as pseudocode to generate both the tree and the sequence of queries you should process.</p>
+
+<pre>
+int curValue = <b>startSeed</b>;
+
+int genNextRandom() {
+    curValue = (curValue * 1999 + 17) % 1000003;
+    return curValue;
+}
+
+void generateInput() {
+    for (int i = 0; i &lt; <b>N</b>-1; i++) {
+        distance[i] = genNextRandom() % <b>maxDist</b>;
+	parent[i] = genNextRandom();
+        if (parent[i] &lt; <b>threshold</b>) {
+            parent[i] = i;
+        } else {
+            parent[i] = parent[i] % (i + 1);
+        }
+    }
+
+    for (int i = 0; i &lt; <b>Q</b>; i++) {
+        queryType[i] = genNextRandom() % 2 + 1;
+        queryNode[i] = genNextRandom() % N;
+    }
+}
+</pre>
+<br></br>
+<p>The output of the above pseudocode are four arrays: parent, distance, queryType, and queryNode.</p>
+<br></br>
+<p>The arrays parent and distance have <b>N</b>-1 elements each. For each valid i, our tree contains an edge between the vertices (i+1) and parent[i].
+The length of that edge is distance[i]. Note that parent[i] will always be between 0 and i, inclusive.</p>
+<br></br>
+<p>The arrays queryType and queryNode have <b>Q</b> elements each. For each valid i, the i-th query (0-based index) you should process has the type queryType[i], and should be applied to the vertex queryNode[i].
+The queries must be processed in the given order.</p>
+<br></br>
+<p>Return the bitwise XOR of the answers to all type 2 queries.</p></td></tr><tr><td colspan="2"><h3>Definition</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Class:</td><td>TreeColoring</td></tr><tr><td>Method:</td><td>color</td></tr><tr><td>Parameters:</td><td>int, int, int, int, int</td></tr><tr><td>Returns:</td><td>long long</td></tr><tr><td>Method signature:</td><td>long long color(int N, int Q, int startSeed, int threshold, int maxDist)</td></tr><tr><td colspan="2">(be sure your method is public)</td></tr></table></td></tr><tr><td colspan="2"><h3>Limits</h3></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td>Time limit (s):</td><td>4.000</td></tr><tr><td>Memory limit (MB):</td><td>256</td></tr></table></td></tr><tr><td colspan="2"><h3>Notes</h3></td></tr><tr><td align="center" valign="top">-</td><td>The intended solution does not rely on any properties of the tree and queries generator provided in the problem statement. It can process 100,000 queries on any tree containing up to 100,000 vertices. It is also able to calculate individual answers to each type 2 query (not just bitwise XOR of all answers).</td></tr><tr><td colspan="2"><h3>Constraints</h3></td></tr><tr><td align="center" valign="top">-</td><td><b>N</b> will be between 2 and 100,000, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>Q</b> will be between 1 and 100,000, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>startSeed</b> will be between 0 and 1,000,002, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>threshold</b> will be between 0 and 1,000,003, inclusive.</td></tr><tr><td align="center" valign="top">-</td><td><b>maxDist</b> will be between 1 and 1,000,003, inclusive.</td></tr><tr><td colspan="2"><h3>Examples</h3></td></tr><tr><td align="center" nowrap="true">0)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>4</pre></td></tr><tr><td><pre>6</pre></td></tr><tr><td><pre>15</pre></td></tr><tr><td><pre>2</pre></td></tr><tr><td><pre>5</pre></td></tr></table></td></tr><tr><td><pre>Returns: 7</pre></td></tr><tr><td><table><tr><td colspan="2"><ul>
+<li>parent = {0,1,2}</li>
+<li>distance = {2,1,3}</li>
+<li>queryType = {2,1,2,2,2,1}</li>
+<li>queryNode = {2,3,2,3,1,3}</li>
+</ul>
+Here are our responses to the 6 queries:
+<ul>
+<li>There are no blue nodes so the answer is clearly zero.</li>
+<li>We paint the node #3 blue.</li>
+<li>The distance between node #2 and node #3 is 3.</li>
+<li>The distance between node #3 and itself is 0.</li>
+<li>The distance between node #1 and node #3 is 4.</li>
+<li>As the node #3 is already blue, we just ignore this query.</li>
+</ul></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">1)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>4</pre></td></tr><tr><td><pre>5</pre></td></tr><tr><td><pre>2</pre></td></tr><tr><td><pre>9</pre></td></tr><tr><td><pre>10</pre></td></tr></table></td></tr><tr><td><pre>Returns: 30</pre></td></tr><tr><td><table><tr><td colspan="2">Here are the edges of the tree you should generate: 0-1 (length 5), 0-3 (length 4), and 1-2 (length 6).
+<br></br>
+<ul>
+<li>For query 0 we return 0 because there are no blue nodes yet.</li>
+<li>Queries 1 and 2 instruct us to color vertices 0 and 3 blue.</li>
+<li>Then, query 3 asks us to compute the sum of distances between the vertex 2 and each of the blue nodes. The distance between 2 and 0 is 11, and the distance between 2 and 3 is 15. Hence the sum of all distances is 11+15 = 26.</li>
+<li>Similarly we can compute that the answer to the last query is 4+0 = 4.</li>
+</ul></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">2)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>8</pre></td></tr><tr><td><pre>8</pre></td></tr><tr><td><pre>3</pre></td></tr><tr><td><pre>5</pre></td></tr><tr><td><pre>7</pre></td></tr></table></td></tr><tr><td><pre>Returns: 6</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">3)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>14750</pre></td></tr><tr><td><pre>50</pre></td></tr><tr><td><pre>29750</pre></td></tr><tr><td><pre>1157</pre></td></tr><tr><td><pre>21610</pre></td></tr></table></td></tr><tr><td><pre>Returns: 2537640</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">4)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>100000</pre></td></tr><tr><td><pre>100000</pre></td></tr><tr><td><pre>123456</pre></td></tr><tr><td><pre>500000</pre></td></tr><tr><td><pre>474747</pre></td></tr></table></td></tr><tr><td><pre>Returns: 726915029831</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr><tr><td align="center" nowrap="true">5)</td><td></td></tr><tr><td>&#160;&#160;&#160;&#160;</td><td><table><tr><td><table><tr><td><pre>100000</pre></td></tr><tr><td><pre>100000</pre></td></tr><tr><td><pre>654321</pre></td></tr><tr><td><pre>1000003</pre></td></tr><tr><td><pre>1000003</pre></td></tr></table></td></tr><tr><td><pre>Returns: 562600687570528</pre></td></tr><tr><td><table><tr><td colspan="2"></td></tr></table></td></tr></table></td></tr></table><p>This problem statement is the exclusive and proprietary property of TopCoder, Inc.  Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited.  (c)2003, TopCoder, Inc.  All rights reserved.  </p></body></html>
