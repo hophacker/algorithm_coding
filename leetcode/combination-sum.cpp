@@ -90,10 +90,8 @@ private:
     vector<int> nums;
 public:
     void searchCombination(int p, int target){
-        if (target == 0){
+        if (target == 0)
             res.push_back(nums);
-            return;
-        }else if (p == cand.size())
             return;
         for (int i = p; i < cand.size(); i++){
             if (cand[i] > target) break;
@@ -109,6 +107,7 @@ public:
         return res;
     }
 };
+
 int main ( int argc, char *argv[] ) {
     /*{
     FILE* file = fopen(argv[1], "r");

@@ -10,8 +10,8 @@
 #include <set>
 #include <cstdlib>
 #include <fstream>
-#include <iomanip>
-#include <iostream>
+#include <iomanip>   
+#include <iostream>  
 #include <sstream>  // istringstream buffer(myString);
 #include <stack>
 #include <algorithm>
@@ -69,77 +69,42 @@ inline void pisz(int n) { printf("%d\n",n); }
 #define printV(a) printA(a,0,(int)a.size()-1);
 #define printVV(a) F(i,0,a.size()) {F(j,0,a[i].size())cout << a[i][j] << ' '; cout << endl;}
 #define MAXN 10000
-#define sz(a) int((a).size())
-#define pb push_back
-#define all(c) (c).begin(),(c).end()
-#define tr(c,i) for(auto i = (c).begin(); i != (c).end(); i++)
-#define present(c,x) ((c).find(x) != (c).end())
-#define cpresent(c,x) (find(all(c),x) != (c).end())
+#define sz(a) int((a).size()) 
+#define pb push_back 
+#define all(c) (c).begin(),(c).end() 
+#define tr(c,i) for(auto i = (c).begin(); i != (c).end(); i++) 
+#define present(c,x) ((c).find(x) != (c).end()) 
+#define cpresent(c,x) (find(all(c),x) != (c).end()) 
 template<class T> string tos(T n) { stringstream ss; ss << n; return ss.str(); }
 #define tiny (double)1e-13
 #define close(x,y) (abs(x-y)<tiny)
 typedef int elem_t;
-typedef vector<int> vi;
-typedef vector<vi> vvi;
-typedef pair<int,int> ii;
+typedef vector<int> vi; 
+typedef vector<vi> vvi; 
+typedef pair<int,int> ii; 
 template<typename T,typename TT> ostream& operator<<(ostream &s,pair<T,TT> t) {return s<<"("<<t.first<<","<<t.second<<")";}
 template<typename T> ostream& operator<<(ostream &s,vector<T> t){F(i,0,SZ(t))s<<t[i]<<" ";return s; }
 int gcd(int a,int b){return a?gcd(b%a,a):b;}
 ll gcd(ll a,ll b){return a?gcd(b%a,a):b;}
 ll powmod(ll a,ll p,ll m){ll r=1;while(p){if(p&1)r=r*a%m;p>>=1;a=a*a%m;}return r;}
-const int fx[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-const int fxx[8][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
+vector<int> a[100001];
 
-char L[1001][11][11];
-int n, m, k, w;
-int p[1001];
-int cc[1001][1001];
-int minC[1001];
-int pre[1001];
-bool vis[1001];
-int diff(int t, int t1){
-    int d = 0;
-    F(i,0,n)
-        F(j,0,m)
-        d += (L[t][i][j] != L[t1][i][j]);
-    return d;
-}
 int main ( int argc, char *argv[] ) {
-    cin >> n >> m >> k >> w;
-
-    FE(t,1,k){
-        F(i, 0, n) getS(L[t][i]);
-        cc[t][0] = cc[0][t] = n*m;
-        F(t1, 1, t){
-            cc[t][t1] = cc[t1][t] =  diff(t, t1) * w;
-        }
+    wez(n);
+    F(i,0,n-1){
+        wez2(x,y);
+        a[x].push_back(y);
+        a[y].push_back(x);
     }
-    FE(t,0,k) minC[t] = n*m, pre[t] = 0;
-    minC[0] = 0;
-    pre[0] = -1;
-
-    clr(vis, false);
-    vis[0] = true;
-
-    stringstream output;
-    int totalCost = 0;
-    F(time,0,k){
-        int T = -1;
-        int cost = INT_MAX;
-        FE(t,0,k) if (!vis[t] && minC[t] < cost){
-            cost = minC[t];
-            T = t;
-        }
-        output << T << ' ' << pre[T] << endl;
-//        cout << T << ' ' << cost << endl;
-        totalCost += cost;
-        vis[T] = true;
-        FE(t,0,k) if (!vis[t] && cc[t][T] < minC[t]){
-            minC[t] = cc[t][T];
-            pre[t] = T;
-        }
+    ll cnt = 0;
+    FE(i,1,n){
+        if (a[i].size() > 1) cnt += (ll)a[i].size() * ((ll)a[i].size()-1) /2;
     }
-    cout << totalCost << endl;
-    cout << output.str() << endl;
+    cout << cnt << endl;
     return EXIT_SUCCESS;
 }
+
+
+
+
+

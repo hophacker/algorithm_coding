@@ -89,12 +89,17 @@ struct ListNode {
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-auto comp = [] (ListNode* a, ListNode* b) -> bool { return (a->val > b->val); };
+class compare{
+    public:
+        bool operator()(ListNode*& a, ListNode*&b){
+            return a->val > b->val;
+        }
+};
 
 class Solution {
 public:
     ListNode *mergeKLists(vector<ListNode *> &lists) {
-        priority_queue<ListNode*, vector<ListNode*>, decltype(comp) > pq(comp);
+        priority_queue<ListNode*, vector<ListNode*>, compare > pq;
 
         ListNode* head = NULL, *tail = NULL;
 

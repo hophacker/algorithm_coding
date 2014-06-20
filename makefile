@@ -1,4 +1,4 @@
-target= try
+target= temp
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w

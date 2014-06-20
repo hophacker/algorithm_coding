@@ -1,4 +1,4 @@
-target= circles-with-common-vertex
+target= 506D
 
 all:
 	#g++ -o $(target) -g $(target).cpp -w
